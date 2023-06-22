@@ -15,4 +15,8 @@
       <Folder Include="Controllers\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ReactRoastDotnet.Data\ReactRoastDotnet.Data.csproj" />
+    </ItemGroup>
+
 </Project>
