@@ -1,5 +1,6 @@
 import NavigationLinks from "./NavigationLinks.tsx";
-import { Bars3Icon } from "@heroicons/react/24/solid";
+import {Bars3Icon} from "@heroicons/react/24/solid";
+
 function DropDownNavMenu() {
   return (
     <div className="dropdown dropdown-end">

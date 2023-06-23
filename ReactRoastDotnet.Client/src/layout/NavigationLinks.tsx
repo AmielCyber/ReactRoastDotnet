@@ -4,23 +4,23 @@ import {NavLink} from "react-router-dom";
 function NavigationLinks() {
     return (
         <>
-            <li tabIndex={0}>
+            <li>
                 <NavLink end to="/">
                     Home
                 </NavLink>
             </li>
-            <li tabIndex={0}>
+            <li>
                 <NavLink end to="/menu">
                     Menu
                 </NavLink>
             </li>
-            <li tabIndex={0}>
+            <li>
                 <a>Account</a>
             </li>
-            <li tabIndex={0}>
+            <li>
                 <a>Sign In</a>
             </li>
-            <li tabIndex={0}>
+            <li>
                 <a>Create Account</a>
             </li>
         </>

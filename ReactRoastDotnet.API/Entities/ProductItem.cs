@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.Data.Entities;
+namespace ReactRoastDotnet.API.Entities;
 
-[Index(nameof(ProductType), IsUnique = true)]
 public class ProductItem
 {
     [Required] public int Id { get; set; }
+    
+    [Required] public required ProductType ProductType { get; set; }
 
     [Required] [MaxLength(64)] public required string Name { get; set; }
 
@@ -20,5 +20,4 @@ public class ProductItem
 
     public string? ImageCreator { get; set; }
 
-    [Required] public required ProductType ProductType { get; set; }
 }

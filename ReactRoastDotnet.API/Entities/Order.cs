@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.Data.Entities;
+namespace ReactRoastDotnet.API.Entities;
 
 [Index(nameof(UserEmail))]
 public class Order
@@ -24,5 +24,5 @@ public class Order
 
 
     // Has many order items.
-    public virtual List<OrderItem>? OrderItems { get; set; }
+    public virtual ICollection<OrderItem>? OrderItems { get; set; } 
 }
