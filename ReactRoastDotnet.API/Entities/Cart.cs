@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ReactRoastDotnet.Data.Entities;
+namespace ReactRoastDotnet.API.Entities;
 
 public class Cart
 {
@@ -13,5 +13,5 @@ public class Cart
     public DateTime DateCreated { get; set; }
 
     // Has many cart items.
-    public virtual List<CartItem>? CartItems { get; set; }
+    public virtual ICollection<CartItem>? CartItems { get; set; }
 }

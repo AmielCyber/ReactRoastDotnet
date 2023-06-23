@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.Data.Entities;
+namespace ReactRoastDotnet.API.Entities;
 
 [PrimaryKey(nameof(CartId), nameof(ProductItemId))]
 public class CartItem
@@ -15,5 +15,5 @@ public class CartItem
 
     [Required] public int Quantity { get; set; }
     
-    [Required] public decimal Price { get; set; }
+    [Required] public decimal Price { get; set; } 
 }

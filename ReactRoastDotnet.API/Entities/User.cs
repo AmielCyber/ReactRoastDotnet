@@ -2,13 +2,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.Data.Entities;
+namespace ReactRoastDotnet.API.Entities;
 
 [Index(nameof(Email), IsUnique = true)]
 public class User
 {
-    [Required] public int Id { get; set; }
-
+    [Required]  public int Id { get; set; }
+    
     [Required] [MaxLength(64)] public required string Email { get; set; }
 
     [Required] [MaxLength(64)] public required string Password { get; set; }
@@ -22,7 +22,7 @@ public class User
 
     // Has one cart.
     public virtual Cart? Cart { get; set; }
-
+    
     // Has many orders.
-    public virtual List<Order>? Orders { get; set; }
+    public virtual ICollection<Order>? Orders { get; set; }
 }
