@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using ReactRoastDotnet.API.Entities;
+using ReactRoastDotnet.Data.Entities;
 
-namespace ReactRoastDotnet.API.Data;
+namespace ReactRoastDotnet.Data;
 
-public class AppDbContext: DbContext
+public class AppDbContext: 
+DbContext
 {
    public AppDbContext(DbContextOptions<AppDbContext> options): base(options){}
    public DbSet<ProductItem> ProductItems { get; set; }

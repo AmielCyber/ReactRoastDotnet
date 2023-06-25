@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.API.Entities;
+namespace ReactRoastDotnet.Data.Entities;
 
 public enum ProductType
 {

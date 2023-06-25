@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ReactRoastDotnet.API.Entities;
+namespace ReactRoastDotnet.Data.Entities;
 
 public class ProductItem
 {

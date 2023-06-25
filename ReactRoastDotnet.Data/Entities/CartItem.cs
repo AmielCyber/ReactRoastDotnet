@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.API.Entities;
+namespace ReactRoastDotnet.Data.Entities;
 
 [PrimaryKey(nameof(CartId), nameof(ProductItemId))]
 public class CartItem

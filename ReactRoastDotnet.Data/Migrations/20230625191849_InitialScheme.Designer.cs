@@ -2,22 +2,25 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ReactRoastDotnet.API.Data;
+using ReactRoastDotnet.Data;
 
 #nullable disable
 
-namespace ReactRoastDotnet.API.Migrations
+namespace ReactRoastDotnet.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230625191849_InitialScheme")]
+    partial class InitialScheme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.Cart", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Cart", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -31,7 +34,7 @@ namespace ReactRoastDotnet.API.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.CartItem", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.CartItem", b =>
                 {
                     b.Property<int>("CartId")
                         .HasColumnType("INTEGER");
@@ -52,7 +55,7 @@ namespace ReactRoastDotnet.API.Migrations
                     b.ToTable("CartItem");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.Order", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,7 +88,7 @@ namespace ReactRoastDotnet.API.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.OrderItem", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.OrderItem", b =>
                 {
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
@@ -106,7 +109,7 @@ namespace ReactRoastDotnet.API.Migrations
                     b.ToTable("OrderItem");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.ProductItem", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.ProductItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,7 +145,7 @@ namespace ReactRoastDotnet.API.Migrations
                     b.ToTable("ProductItems");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.User", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,26 +183,26 @@ namespace ReactRoastDotnet.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.Cart", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Cart", b =>
                 {
-                    b.HasOne("ReactRoastDotnet.API.Entities.User", "User")
+                    b.HasOne("ReactRoastDotnet.Data.Entities.User", "User")
                         .WithOne("Cart")
-                        .HasForeignKey("ReactRoastDotnet.API.Entities.Cart", "UserId")
+                        .HasForeignKey("ReactRoastDotnet.Data.Entities.Cart", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.CartItem", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.CartItem", b =>
                 {
-                    b.HasOne("ReactRoastDotnet.API.Entities.Cart", null)
+                    b.HasOne("ReactRoastDotnet.Data.Entities.Cart", null)
                         .WithMany("CartItems")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReactRoastDotnet.API.Entities.ProductItem", "ProductItem")
+                    b.HasOne("ReactRoastDotnet.Data.Entities.ProductItem", "ProductItem")
                         .WithMany()
                         .HasForeignKey("ProductItemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -208,24 +211,24 @@ namespace ReactRoastDotnet.API.Migrations
                     b.Navigation("ProductItem");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.Order", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Order", b =>
                 {
-                    b.HasOne("ReactRoastDotnet.API.Entities.User", "User")
+                    b.HasOne("ReactRoastDotnet.Data.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.OrderItem", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.OrderItem", b =>
                 {
-                    b.HasOne("ReactRoastDotnet.API.Entities.Order", null)
+                    b.HasOne("ReactRoastDotnet.Data.Entities.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReactRoastDotnet.API.Entities.ProductItem", "ProductItem")
+                    b.HasOne("ReactRoastDotnet.Data.Entities.ProductItem", "ProductItem")
                         .WithMany()
                         .HasForeignKey("ProductItemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -234,17 +237,17 @@ namespace ReactRoastDotnet.API.Migrations
                     b.Navigation("ProductItem");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.Cart", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Cart", b =>
                 {
                     b.Navigation("CartItems");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.Order", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("ReactRoastDotnet.API.Entities.User", b =>
+            modelBuilder.Entity("ReactRoastDotnet.Data.Entities.User", b =>
                 {
                     b.Navigation("Cart");
 

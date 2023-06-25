@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ReactRoastDotnet.API.Migrations
+namespace ReactRoastDotnet.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSchema : Migration
+    public partial class InitialScheme : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

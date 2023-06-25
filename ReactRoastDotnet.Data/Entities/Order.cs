@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.API.Entities;
+namespace ReactRoastDotnet.Data.Entities;
 
 [Index(nameof(UserEmail))]
 public class Order
