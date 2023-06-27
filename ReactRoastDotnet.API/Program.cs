@@ -1,11 +1,13 @@
-using Microsoft.AspNetCore.Identity;
+using System.Net.Mime;
 using Microsoft.EntityFrameworkCore;
+using ReactRoastDotnet.API.Middleware;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 builder.Services.AddControllers();
 
@@ -19,10 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlite(connectionString, x => x.MigrationsAssembly("ReactRoastDotnet.Data")));
 
 // Set up Identity Core.
-builder.Services.AddIdentityCore<User>(options =>
-    {
-        options.User.RequireUniqueEmail = true;
-    })
+builder.Services.AddIdentityCore<User>(options => { options.User.RequireUniqueEmail = true; })
     .AddRoles<CustomRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
@@ -37,9 +36,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Add global middleware.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors(options =>
+    {
+        options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3175");
+    });
     app.UseSwagger();
     app.UseSwaggerUI();
 }
