@@ -2,18 +2,18 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactRoastDotnet.API.Entities;
+namespace ReactRoastDotnet.Data.Entities;
 
-[Index(nameof(UserEmail))]
+[Index(nameof(Email))]
 public class Order
 {
-    [Required] public int Id { get; set; }
+    public int Id { get; set; }
 
     // Belongs to a user.
     public int? UserId { get; set; }
-    public virtual User? User { get; set; }
+    public User? User { get; set; }
 
-    [Required] [MaxLength(64)] public required string UserEmail { get; set; }
+    [Required] [MaxLength(256)] public required string Email { get; set; }
 
     [Required] public int TotalQuantity { get; set; }
 
@@ -24,5 +24,5 @@ public class Order
 
 
     // Has many order items.
-    public virtual ICollection<OrderItem>? OrderItems { get; set; } 
+    public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
 }

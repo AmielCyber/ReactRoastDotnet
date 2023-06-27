@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ReactRoastDotnet.API.Entities;
+namespace ReactRoastDotnet.Data.Entities;
 
 public class ProductItem
 {
-    [Required] public int Id { get; set; }
+    public int Id { get; set; }
     
     [Required] public required ProductType ProductType { get; set; }
 
@@ -18,6 +18,6 @@ public class ProductItem
 
     [Required] public required string Image { get; set; }
 
-    public string? ImageCreator { get; set; }
+    public string ImageCreator { get; set; } = "Unknown";
 
 }

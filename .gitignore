@@ -5,3 +5,6 @@ riderModule.iml
 /_ReSharper.Caches/
 /.idea
 .DS_Store
+ReactRoastDotnet.API/appsettings.Development.json
+ReactRoastDotnet.API/app.db
+ReactRoastDotnet.sln.DotSettings.user
