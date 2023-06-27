@@ -7,11 +7,11 @@ namespace ReactRoastDotnet.Data.Entities;
 public class OrderItem
 {
     // Belongs to one order.
-    [Required] public int OrderId { get; set; }
+    public int OrderId { get; set; }
 
     // Has one product item.
     [Required] public int ProductItemId { get; set; }
-    public virtual ProductItem? ProductItem { get; set; }
+    public ProductItem ProductItem { get; set; } = null!;
 
     [Required] public int Quantity { get; set; }
 

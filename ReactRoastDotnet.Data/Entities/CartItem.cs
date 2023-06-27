@@ -11,9 +11,7 @@ public class CartItem
 
     // Has one product item.
     [Required] public int ProductItemId { get; set; }
-    public virtual ProductItem? ProductItem { get; set; }
+    public ProductItem ProductItem { get; set; } = null!;
 
     [Required] public int Quantity { get; set; }
-    
-    [Required] public decimal Price { get; set; } 
 }

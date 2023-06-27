@@ -17,11 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-      <Folder Include="Models\RequestDtos\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ReactRoastDotnet.Data\ReactRoastDotnet.Data.csproj" />
     </ItemGroup>
 
