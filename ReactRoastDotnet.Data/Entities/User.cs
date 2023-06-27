@@ -11,6 +11,7 @@ public class User : IdentityUser<int>
     [Required] [MaxLength(64)] public required string LastName { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Required]
     public DateTime DateCreated { get; set; }
 
     // Relationships.

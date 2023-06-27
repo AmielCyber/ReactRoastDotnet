@@ -145,7 +145,7 @@ namespace ReactRoastDotnet.Data.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("ReactRoastDotnet.Data.Entities.CustomRole", b =>
@@ -246,7 +246,7 @@ namespace ReactRoastDotnet.Data.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ReactRoastDotnet.Data.Entities.ProductItem", b =>
@@ -278,8 +278,9 @@ namespace ReactRoastDotnet.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductType")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -295,7 +296,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Latte",
                             Ounces = 10.0,
                             Price = 5.0m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -306,7 +307,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Iced Latte",
                             Ounces = 10.0,
                             Price = 5.0m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -317,7 +318,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Nitro Cold Brew",
                             Ounces = 8.0,
                             Price = 4.5m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -328,7 +329,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Cold Brew",
                             Ounces = 8.0,
                             Price = 4.0m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -339,7 +340,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Drip Coffee",
                             Ounces = 8.0,
                             Price = 3.5m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -350,7 +351,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Americano",
                             Ounces = 6.0,
                             Price = 4.0m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -361,7 +362,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Cappuccino",
                             Ounces = 6.0,
                             Price = 4.5m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -372,7 +373,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Espresso Shot",
                             Ounces = 1.0,
                             Price = 3.5m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -383,7 +384,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Cortado",
                             Ounces = 3.0,
                             Price = 3.75m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -394,7 +395,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Macchiato",
                             Ounces = 3.0,
                             Price = 3.75m,
-                            ProductType = 0
+                            Type = "Drink"
                         },
                         new
                         {
@@ -405,7 +406,7 @@ namespace ReactRoastDotnet.Data.Migrations
                             Name = "Flat White",
                             Ounces = 6.0,
                             Price = 4.5m,
-                            ProductType = 0
+                            Type = "Drink"
                         });
                 });
 
@@ -553,7 +554,7 @@ namespace ReactRoastDotnet.Data.Migrations
             modelBuilder.Entity("ReactRoastDotnet.Data.Entities.CartItem", b =>
                 {
                     b.HasOne("ReactRoastDotnet.Data.Entities.Cart", null)
-                        .WithMany("CartItems")
+                        .WithMany("Items")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -595,7 +596,7 @@ namespace ReactRoastDotnet.Data.Migrations
 
             modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Cart", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("ReactRoastDotnet.Data.Entities.Order", b =>
