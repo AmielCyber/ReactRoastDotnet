@@ -1,6 +1,6 @@
 namespace ReactRoastDotnet.Data.Roles;
 
-public class DemoUserRole: IRoles
+public class DemoUserRole : IRoles
 {
     public static readonly string Name = "DemoUser";
     public static readonly string NormalizedName = "DEMO_USER";

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +21,10 @@ public class Order
     [Required] public decimal TotalPrice { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public required DateTime DateCreated { get; set; }
+    [Required]
+    public DateTime DateCreated { get; set; }
 
 
     // Has many order items.
-    public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+    public ICollection<OrderItem> Items { get; set; } = null!;
 }

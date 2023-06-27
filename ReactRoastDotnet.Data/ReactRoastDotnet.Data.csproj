@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.8" />
     </ItemGroup>
 
     <PropertyGroup>
         <BaseOutputPath>../ReactRoastDotnet.API/bin/</BaseOutputPath>
     </PropertyGroup>
-    
+
 </Project>

@@ -8,11 +8,13 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
 {
     public void Configure(EntityTypeBuilder<ProductItem> builder)
     {
+        const string drinkType = "Drink";
+
         builder.HasData(
             new ProductItem
             {
                 Id = 1,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Latte",
                 Ounces = 10.0,
                 Description =
@@ -24,7 +26,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 2,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Iced Latte",
                 Ounces = 10.0,
                 Description =
@@ -36,7 +38,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 3,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Nitro Cold Brew",
                 Ounces = 8.0,
                 Description = "Cold brew infused with nitro giving it a creamy texture.",
@@ -47,7 +49,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 4,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Cold Brew",
                 Ounces = 8.0,
                 Description = "Coffee steeped in cold water giving it a less acidic signature and more caffeine.",
@@ -58,7 +60,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 5,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Drip Coffee",
                 Ounces = 8.0,
                 Description = "For those that just want a cup of hot coffee!",
@@ -69,7 +71,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 6,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Americano",
                 Ounces = 6.0,
                 Description =
@@ -81,7 +83,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 7,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Cappuccino",
                 Ounces = 6.0,
                 Description =
@@ -93,7 +95,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 8,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Espresso Shot",
                 Ounces = 1.0,
                 Description = "For the coffee connoisseur.",
@@ -104,7 +106,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 9,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Cortado",
                 Ounces = 3.0,
                 Description =
@@ -116,7 +118,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 10,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Macchiato",
                 Ounces = 3.0,
                 Description =
@@ -128,7 +130,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             new ProductItem
             {
                 Id = 12,
-                ProductType = ProductType.Drink,
+                Type = drinkType,
                 Name = "Flat White",
                 Ounces = 6.0,
                 Description =

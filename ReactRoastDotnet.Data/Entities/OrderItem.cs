@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReactRoastDotnet.Data.Entities;
 
+[Table("OrderItems")]
 [PrimaryKey(nameof(OrderId), nameof(ProductItemId))]
 public class OrderItem
 {
@@ -10,7 +12,7 @@ public class OrderItem
     public int OrderId { get; set; }
 
     // Has one product item.
-    [Required] public int ProductItemId { get; set; }
+    public int ProductItemId { get; set; }
     public ProductItem ProductItem { get; set; } = null!;
 
     [Required] public int Quantity { get; set; }

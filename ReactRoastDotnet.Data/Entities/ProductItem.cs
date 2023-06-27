@@ -5,8 +5,8 @@ namespace ReactRoastDotnet.Data.Entities;
 public class ProductItem
 {
     public int Id { get; set; }
-    
-    [Required] public required ProductType ProductType { get; set; }
+
+    [Required] public required string Type { get; set; }
 
     [Required] [MaxLength(64)] public required string Name { get; set; }
 
@@ -19,5 +19,4 @@ public class ProductItem
     [Required] public required string Image { get; set; }
 
     public string ImageCreator { get; set; } = "Unknown";
-
 }
