@@ -12,7 +12,7 @@ public class Cart
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Required]
-    public DateTime DateCreated { get; set; }
+    public required DateTime DateCreated { get; set; }
 
     // Relationships.
 

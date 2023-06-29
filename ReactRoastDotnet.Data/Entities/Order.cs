@@ -22,7 +22,7 @@ public class Order
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Required]
-    public DateTime DateCreated { get; set; }
+    public required DateTime DateCreated { get; set; }
 
 
     // Has many order items.

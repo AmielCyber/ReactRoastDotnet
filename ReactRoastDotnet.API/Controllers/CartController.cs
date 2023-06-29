@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReactRoastDotnet.Data;
@@ -7,19 +9,26 @@ using ReactRoastDotnet.Data.Models.ResponseDto;
 namespace ReactRoastDotnet.API.Controllers;
 
 // TODO: Refactor to use services.
-// TODO: Add correct REST endpoints.
+// TODO: Add correct REST endpoints:
+// TODO: DELETE: /api/carts/products/{productId}?quantity=1
+// TODO: POST: /api/carts/products/{productId}?quantity=1
+// TODO: GET: /api/carts
+// TODO: DELETE: /api/carts
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CartController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public CartController(AppDbContext context)
+    public CartController(AppDbContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
-    [HttpGet]
+    [HttpGet(Name = "GetCart")]
     public async Task<ActionResult<CartDto>> GetCart()
     {
         Cart? cart = await RetrieveCart();
@@ -57,7 +66,7 @@ public class CartController : ControllerBase
             return BadRequest(new ProblemDetails { Title = "Problem saving item to cart" });
         }
 
-        return CreatedAtRoute(nameof(GetCart), MapCartToCartDto(cart));
+        return CreatedAtRoute("GetCart", MapCartToCartDto(cart));
     }
 
     [HttpDelete]
@@ -105,35 +114,42 @@ public class CartController : ControllerBase
 
     private async Task<Cart?> RetrieveCart()
     {
-        var valid = int.TryParse(Request.Cookies["userId"], out var userId);
-        if (!valid)
-        {
-            return null;
-        }
+        int userId = GetUserId();
 
-        var cart = await _context.Carts
+        Cart? cart = await _context.Carts
             .Include(cart => cart.Items)
             .ThenInclude(cartItem => cartItem.ProductItem)
             .FirstOrDefaultAsync(cart => cart.UserId == userId);
+        
         return cart;
+    }
+
+    private int GetUserId()
+    {
+        var validUserId = int.TryParse(_userManager.GetUserId(User), out var userId);
+        if (!validUserId)
+        {
+            // TODO: Change to a custom exception.
+            throw new Exception("User Id not found");
+        }
+
+        return userId;
     }
 
     private Cart CreateCart()
     {
         // TODO: Use userId from identity
-        var userId = Guid.NewGuid().GetHashCode();
-        var cookieOptions = new CookieOptions
-        {
-            IsEssential = true,
-            Expires = DateTimeOffset.Now.AddDays(7)
-        };
-        Response.Cookies.Append("userId", userId.ToString(), cookieOptions);
+        int userId = GetUserId();
+        
         var cart = new Cart
         {
             UserId = userId,
+            DateCreated = DateTime.Now
         };
 
         _context.Carts.Add(cart);
         return cart;
     }
+    
+    
 }

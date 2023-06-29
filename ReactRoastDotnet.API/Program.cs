@@ -1,7 +1,13 @@
-using System.Net.Mime;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ReactRoastDotnet.API.Middleware;
+using ReactRoastDotnet.API.Services;
 using ReactRoastDotnet.Data;
+using ReactRoastDotnet.Data.Configurations;
 using ReactRoastDotnet.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,12 +32,49 @@ builder.Services.AddIdentityCore<User>(options => { options.User.RequireUniqueEm
     .AddEntityFrameworkStores<AppDbContext>();
 
 // Add authentication and authorization
-builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:TokenKey"]))
+        };
+    });
 builder.Services.AddAuthorization();
+// Scoped for the beginning and end of request.
+builder.Services.AddScoped<TokenService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => 
+{
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Put **_ONLY_** your JWT Bearer token on text-box below!",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            jwtSecurityScheme, Array.Empty<string>()
+        }
+    });
+});
 
 
 var app = builder.Build();
@@ -41,12 +84,21 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
+    var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    await UserConfiguration.Initialize(context, userManager);
+
+
     app.UseCors(options =>
     {
-        options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3175");
+        options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5175");
     });
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+    });
 }
 
 app.UseHttpsRedirection();

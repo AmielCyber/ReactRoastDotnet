@@ -129,7 +129,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
             },
             new ProductItem
             {
-                Id = 12,
+                Id = 11,
                 Type = drinkType,
                 Name = "Flat White",
                 Ounces = 6.0,
