@@ -2,31 +2,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ReactRoastDotnet.API.Controllers;
 
-// TODO: Get rid of for production
-// Test controller for exception handling in the client app.
-[ApiController]
-[Route("api/[controller]")]
-public class ErrorsController: ControllerBase
+// TODO: Get rid of for production when deployed with React.
+/// <summary>
+/// Test controller for exception handling in the client app. 
+/// </summary>
+public class ErrorsController: ApiController
 {
-    [HttpGet("not-found")]
+    [HttpGet("Not-Found")]
     public ActionResult GetNotFound()
     {
         return NotFound();
     }
     
-    [HttpGet("bad-request")]
+    [HttpGet("Bad-Request")]
     public ActionResult GetBadRequest()
     {
         return BadRequest("This is a bad request.");
     }
     
-    [HttpGet("unauthorized")]
+    [HttpGet("Unauthorized")]
     public ActionResult GetUnauthorized()
     {
         return Unauthorized();
     }
     
-    [HttpGet("validation-error")]
+    [HttpGet("Validation-Error")]
     public ActionResult GetValidationError()
     {
         ModelState.AddModelError("Problem 1", "First error.");
@@ -35,7 +35,7 @@ public class ErrorsController: ControllerBase
         return ValidationProblem();
     }
     
-    [HttpGet("server-error")]
+    [HttpGet("Server-Error")]
     public ActionResult GetServerError()
     {
         throw new Exception("This is a test error.");
