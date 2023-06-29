@@ -11,7 +11,7 @@ using ReactRoastDotnet.Data;
 namespace ReactRoastDotnet.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230627223004_AddedIdentityAndRoles")]
+    [Migration("20230629044427_AddedIdentityAndRoles")]
     partial class AddedIdentityAndRoles
     {
         /// <inheritdoc />
@@ -193,8 +193,8 @@ namespace ReactRoastDotnet.Data.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "DemoUser",
-                            NormalizedName = "DEMO_USER"
+                            Name = "Demo",
+                            NormalizedName = "DEMO"
                         });
                 });
 
@@ -402,7 +402,7 @@ namespace ReactRoastDotnet.Data.Migrations
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 11,
                             Description = "For those who wished the latte had more of an espresso taste. Made of 2 ounces of espresso and 4 ounces of steam milk.",
                             Image = "/drinkImages/flatWhite.jpg",
                             ImageCreator = "@hoanvokim",
@@ -431,6 +431,7 @@ namespace ReactRoastDotnet.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
