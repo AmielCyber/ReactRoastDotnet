@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ReactRoastDotnet.API.Extensions;
+using ReactRoastDotnet.API.RequestParams;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Entities;
 using ReactRoastDotnet.Data.Models.ResponseDto;
@@ -19,17 +21,29 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ProductItem>>> GetProducts(string? orderBy)
+    public async Task<ActionResult<ProductItemListDto>> GetProducts([FromQuery]ProductParams productParams)
     {
-        var query = _context.ProductItems.AsQueryable();
-        query = orderBy switch
+        var totalItems = await _context.ProductItems.CountAsync();
+        
+        var query = _context.ProductItems
+            .AsNoTracking()
+            .Skip((productParams.PageNumber-1)*productParams.PageSize)
+            .Take(productParams.PageSize)
+            .Sort(productParams.Sort)
+            .SearchDrink(productParams.DrinkName)
+            .AsQueryable();
+
+        List<ProductItem> productItems = await query.ToListAsync();
+        Pagination pagination = new Pagination
         {
-            "price" => query.OrderBy(p => p.Price),
-            "priceDesc" => query.OrderByDescending(p => p.Price),
-            "name" => query.OrderBy(p => p.Name),
-            _ => query.OrderBy(p => p.Id)
+            CurrentPage = productParams.PageNumber,
+            PageSize = productParams.PageSize,
+            TotalCount = totalItems,
+            TotalPages = (int)Math.Ceiling(totalItems / (double)productParams.PageSize)
         };
-        return await query.ToListAsync();
+
+        return new ProductItemListDto(productItems, pagination);
+
     }
 
     [HttpGet("{id}")]
@@ -43,5 +57,4 @@ public class ProductsController : ControllerBase
 
         return Ok(productItem);
     }
-
 }
