@@ -11,8 +11,8 @@ using ReactRoastDotnet.Data;
 namespace ReactRoastDotnet.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230629044427_AddedIdentityAndRoles")]
-    partial class AddedIdentityAndRoles
+    [Migration("20230630041824_ModifiedCartEntity")]
+    partial class ModifiedCartEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,8 +124,7 @@ namespace ReactRoastDotnet.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");

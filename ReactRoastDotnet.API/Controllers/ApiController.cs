@@ -6,7 +6,7 @@ namespace ReactRoastDotnet.API.Controllers;
 /// Main controller that all controllers in this application will inherit from.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("Api/[controller]")]
 public class ApiController: ControllerBase 
 {
     

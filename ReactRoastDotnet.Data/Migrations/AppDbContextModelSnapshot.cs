@@ -121,8 +121,7 @@ namespace ReactRoastDotnet.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
