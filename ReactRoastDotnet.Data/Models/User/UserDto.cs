@@ -6,5 +6,4 @@ namespace ReactRoastDotnet.Data.Models.User;
 /// <param name="FirstName">User's first name.</param>
 /// <param name="LastName">User's last name.</param>
 /// <param name="Email">User's email.</param>
-/// <param name="Token">User's token obtain from this server.</param>
-public record UserDto(string FirstName, string LastName, string Email, string Token);
+public record UserDto(string FirstName, string LastName, string Email);

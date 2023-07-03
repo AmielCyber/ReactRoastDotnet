@@ -1,6 +1,16 @@
+using System.Security.Claims;
+using ErrorOr;
+using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Models.User;
+
 namespace ReactRoastDotnet.Data.Repositories;
 
-public class IUserService
+public interface IUserService
 {
-    
+    public Task<ErrorOr<User>> LoginAsync(UserLoginDto userLoginDto);
+
+    public Task<ErrorOr<UserDto>> RegisterAsync(UserRegisterDto userRegisterDto);
+
+    // TODO: Remove for full production
+    public Task<ErrorOr<UserDto>> GetCurrentUserAsync(ClaimsPrincipal user);
 }
