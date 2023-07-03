@@ -8,9 +8,9 @@ namespace ReactRoastDotnet.Data.Repositories;
 
 public interface IProductService
 {
-    public Task<PaginationList<ProductItem>> GetAllProductItemsAsync(ProductParams productParams);
-    public Task<ErrorOr<ProductItem>> GetProductItemAsync(int id);
-    public Task<ErrorOr<ProductItem>> CreateNewProductItemAsync(EditProductDto createProductDto);
-    public Task<ErrorOr<ProductItem>> EditExistingProductItemAsync(EditProductDto editProductDto, int id);
-    public Task<ErrorOr<Deleted>> DeleteProductItemAsync(int id);
+    public Task<PaginationList<ProductItem>> GetAllItemsAsync(ProductParams productParams);
+    public Task<ErrorOr<ProductItem>> GetItemAsync(int id);
+    public Task<ErrorOr<ProductItem>> CreateItemAsync(EditProductDto createProductDto);
+    public Task<ErrorOr<ProductItem>> EditItemAsync(EditProductDto editProductDto, int id);
+    public Task<ErrorOr<Deleted>> DeleteItemAsync(int id);
 }

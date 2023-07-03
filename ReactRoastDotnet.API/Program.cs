@@ -86,6 +86,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 // Register repositories
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 var app = builder.Build();
 
