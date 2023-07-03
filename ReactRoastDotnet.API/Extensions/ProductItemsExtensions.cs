@@ -1,3 +1,4 @@
+using ReactRoastDotnet.API.Models.RequestDto;
 using ReactRoastDotnet.Data.Entities;
 
 namespace ReactRoastDotnet.API.Extensions;
@@ -35,5 +36,16 @@ public static class ProductItemsExtension
         var lowerCaseDrinkName = drinkName.Trim().ToLower();
 
         return query.Where(i => i.Name.ToLower().Contains(lowerCaseDrinkName));
+    }
+
+    public static void UpdateProductItem(this ProductItem productItem, EditProductDto editProductDto)
+    {
+        productItem.Type = editProductDto.Type;
+        productItem.Name = editProductDto.Name;
+        productItem.Ounces = editProductDto.Ounces;
+        productItem.Description = editProductDto.Description;
+        productItem.Price = editProductDto.Price;
+        productItem.Image = editProductDto.Image;
+        productItem.ImageCreator = editProductDto.ImageCreator;
     }
 }
