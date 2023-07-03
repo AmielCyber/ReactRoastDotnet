@@ -278,7 +278,7 @@ namespace ReactRoastDotnet.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "Administrator", "ADMINISTRATOR" },
+                    { 1, null, "Admin", "ADMIN" },
                     { 2, null, "User", "USER" },
                     { 3, null, "Demo", "DEMO" }
                 });

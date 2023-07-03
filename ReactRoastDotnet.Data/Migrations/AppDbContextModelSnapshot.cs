@@ -177,8 +177,8 @@ namespace ReactRoastDotnet.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {

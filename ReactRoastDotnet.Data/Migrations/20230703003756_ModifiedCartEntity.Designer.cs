@@ -11,7 +11,7 @@ using ReactRoastDotnet.Data;
 namespace ReactRoastDotnet.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230630041824_ModifiedCartEntity")]
+    [Migration("20230703003756_ModifiedCartEntity")]
     partial class ModifiedCartEntity
     {
         /// <inheritdoc />
@@ -180,8 +180,8 @@ namespace ReactRoastDotnet.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {

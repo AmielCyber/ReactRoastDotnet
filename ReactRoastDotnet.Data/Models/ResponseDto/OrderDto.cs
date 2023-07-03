@@ -2,9 +2,9 @@ namespace ReactRoastDotnet.Data.Models.ResponseDto;
 
 public record OrderDto
 {
-    public int OrderId { get; init; }
+    public int Id { get; init; }
 
-    public required List<OrderItemDto> Items { get; init; }
+    public required List<OrderItemDto> OrderItems { get; init; }
 
     public int TotalQuantity { get; init; }
 
