@@ -6,26 +6,27 @@ namespace ReactRoastDotnet.API.Controllers;
 /// <summary>
 /// Test controller for exception handling in the client app. 
 /// </summary>
-public class ErrorsController: ApiController
+[ApiExplorerSettings(IgnoreApi = true)]
+public class ErrorsController : ApiController
 {
     [HttpGet("Not-Found")]
     public ActionResult GetNotFound()
     {
         return NotFound();
     }
-    
+
     [HttpGet("Bad-Request")]
     public ActionResult GetBadRequest()
     {
         return BadRequest("This is a bad request.");
     }
-    
+
     [HttpGet("Unauthorized")]
     public ActionResult GetUnauthorized()
     {
         return Unauthorized();
     }
-    
+
     [HttpGet("Validation-Error")]
     public ActionResult GetValidationError()
     {
@@ -34,7 +35,7 @@ public class ErrorsController: ApiController
 
         return ValidationProblem();
     }
-    
+
     [HttpGet("Server-Error")]
     public ActionResult GetServerError()
     {

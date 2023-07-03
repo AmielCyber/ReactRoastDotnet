@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReactRoastDotnet.Data.Configurations;
 using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Roles;
 
 namespace ReactRoastDotnet.Data;
 

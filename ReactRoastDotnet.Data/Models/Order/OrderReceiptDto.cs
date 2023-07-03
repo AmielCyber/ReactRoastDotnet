@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.API.Models.ResponseDto;
+namespace ReactRoastDotnet.Data.Models.Order;
 
 public record OrderReceiptDto
 {

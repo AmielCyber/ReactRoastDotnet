@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ReactRoastDotnet.API.Models.RequestDto;
+namespace ReactRoastDotnet.Data.Models.User;
 
 /// <summary>
 /// User registration object from the request body.

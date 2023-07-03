@@ -1,7 +1,7 @@
-using ReactRoastDotnet.API.Models.RequestDto;
 using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Models.Order;
 
-namespace ReactRoastDotnet.API.Extensions;
+namespace ReactRoastDotnet.Data.Extensions;
 
 // TODO: Add filter for product types when we add other types rather than "Drinks"
 public static class ProductItemsExtension

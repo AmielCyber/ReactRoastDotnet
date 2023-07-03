@@ -35,7 +35,7 @@ public class ExceptionMiddleware
 
             var response = new ProblemDetails
             {
-                Title = _env.IsDevelopment() ? e.Message: "Server Error",
+                Title = _env.IsDevelopment() ? e.Message : "Server Error",
                 // Only show stack trace in development.
                 Detail = _env.IsDevelopment() ? e.StackTrace : "An error occurred while processing your request.",
                 Status = (int)HttpStatusCode.InternalServerError,

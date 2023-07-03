@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.Data.Models.ResponseDto;
+namespace ReactRoastDotnet.Data.Models.ProductItem;
 
 /// <summary>The product details for a cart or order item.</summary>
 public record ProductItemDto

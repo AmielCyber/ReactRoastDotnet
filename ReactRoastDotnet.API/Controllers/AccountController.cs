@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ReactRoastDotnet.API.Models.RequestDto;
-using ReactRoastDotnet.API.Models.ResponseDto;
 using ReactRoastDotnet.API.Services;
 using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Models.User;
 using ReactRoastDotnet.Data.Roles;
 
 namespace ReactRoastDotnet.API.Controllers;

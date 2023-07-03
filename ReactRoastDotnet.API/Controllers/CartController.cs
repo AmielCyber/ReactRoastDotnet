@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Entities;
-using ReactRoastDotnet.Data.Models.ResponseDto;
+using ReactRoastDotnet.Data.Models.Cart;
 
 namespace ReactRoastDotnet.API.Controllers;
 
