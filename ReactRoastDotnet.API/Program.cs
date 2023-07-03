@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -51,8 +52,13 @@ builder.Services.AddScoped<TokenService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => 
+builder.Services.AddSwaggerGen(options =>
 {
+    // TODO: Generate OpenApi xml file.
+    // Read generated XML document
+    // var file = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    // options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, file));
+    // Set up Swagger to use a token in our header.
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         BearerFormat = "JWT",
@@ -60,7 +66,8 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Put **_ONLY_** your JWT Bearer token on text-box below!",
+        Description =
+            "JWT Authorization header using the Bearer scheme. \r\n\r\n Put **_ONLY_** your JWT Bearer token on text-box below!",
         Reference = new OpenApiReference
         {
             Id = JwtBearerDefaults.AuthenticationScheme,
@@ -74,8 +81,8 @@ builder.Services.AddSwaggerGen(options =>
             jwtSecurityScheme, Array.Empty<string>()
         }
     });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "React Roast.NET", Version = "v1" });
 });
-
 
 var app = builder.Build();
 
@@ -95,10 +102,7 @@ if (app.Environment.IsDevelopment())
         options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5175");
     });
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
-    });
+    app.UseSwaggerUI(options => { options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); });
 }
 
 app.UseHttpsRedirection();

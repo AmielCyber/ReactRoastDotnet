@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +21,7 @@ public class Order
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Required]
-    public required DateTime DateCreated { get; set; }
+    public DateTime DateCreated { get; set; } = DateTime.Now;
 
 
     // Has many order items.

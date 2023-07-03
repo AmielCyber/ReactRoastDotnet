@@ -16,5 +16,4 @@ public class CartItem
     public ProductItem ProductItem { get; set; } = null!;
 
     [Required] public int Quantity { get; set; }
-
 }

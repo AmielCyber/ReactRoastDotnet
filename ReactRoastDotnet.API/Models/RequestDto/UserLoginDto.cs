@@ -2,8 +2,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ReactRoastDotnet.API.Models.RequestDto;
 
+/// <summary>
+/// Login object from a request body.
+/// </summary>
 public record UserLoginDto
 {
-    [Required] public required string Email { get; init; }
-    [Required] public required string Password { get; init; }
+    /// <summary>Unique email address from user.</summary>
+    [Required]
+    [EmailAddress]
+    public required string Email { get; init; }
+
+    /// <summary>Password that meets identity core's default password requirements</summary>
+    [Required]
+    [MinLength(6)]
+    public required string Password { get; init; }
 }

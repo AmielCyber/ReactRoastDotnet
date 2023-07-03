@@ -1,8 +1,14 @@
 namespace ReactRoastDotnet.Data.Models.ResponseDto;
 
+/// <summary>
+/// Cart Data Transfer Object to send to the user for all GET and POST to the
+/// cart endpoint.
+/// </summary>
 public record CartDto
 {
+    /// <summary>Item list of products.</summary>
     public List<CartItemDto> Items { get; init; } = new();
 
-    public required DateTime DateCreated { get; init; }
+    /// <summary>Last modified from a CRUD operation</summary>
+    public required DateTime LastModified { get; init; }
 }

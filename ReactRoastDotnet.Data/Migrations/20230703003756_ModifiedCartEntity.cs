@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ReactRoastDotnet.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedIdentityAndRoles : Migration
+    public partial class ModifiedCartEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -187,7 +187,7 @@ namespace ReactRoastDotnet.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    LastModified = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -278,7 +278,7 @@ namespace ReactRoastDotnet.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "Administrator", "ADMINISTRATOR" },
+                    { 1, null, "Admin", "ADMIN" },
                     { 2, null, "User", "USER" },
                     { 3, null, "Demo", "DEMO" }
                 });
