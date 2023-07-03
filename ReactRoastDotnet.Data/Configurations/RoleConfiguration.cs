@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ReactRoastDotnet.Data.Entities;
 using ReactRoastDotnet.Data.Roles;
 
 namespace ReactRoastDotnet.Data.Configurations;

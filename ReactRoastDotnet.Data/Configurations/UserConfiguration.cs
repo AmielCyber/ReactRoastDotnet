@@ -21,7 +21,7 @@ public static class UserConfiguration
             };
             await userManager.CreateAsync(demoUser, "P@ssw0rd");
             await userManager.AddToRoleAsync(demoUser, DemoUserRole.Name);
-            
+
             var user = new User
             {
                 FirstName = "User",
@@ -32,7 +32,7 @@ public static class UserConfiguration
             };
             await userManager.CreateAsync(user, "P@ssw0rd");
             await userManager.AddToRoleAsync(user, UserRole.Name);
-            
+
             var admin = new User
             {
                 FirstName = "Admin",
@@ -41,11 +41,9 @@ public static class UserConfiguration
                 Email = "admin@gmail.com",
                 DateCreated = DateTime.Now,
             };
-            
+
             await userManager.CreateAsync(admin, "P@ssw0rd");
-            await userManager.AddToRolesAsync(admin, new [] {AdministratorRole.Name, UserRole.Name});
+            await userManager.AddToRolesAsync(admin, new[] { AdministratorRole.Name, UserRole.Name });
         }
     }
-    
-    
 }

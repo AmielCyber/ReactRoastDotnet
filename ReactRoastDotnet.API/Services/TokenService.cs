@@ -24,7 +24,7 @@ public class TokenService
         {
             throw new Exception("Invalid user email or username passed for token creation.");
         }
-        
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, user.Email),
@@ -50,5 +50,4 @@ public class TokenService
 
         return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
     }
-    
 }

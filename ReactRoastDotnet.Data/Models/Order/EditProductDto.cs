@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ReactRoastDotnet.API.Models.RequestDto;
+namespace ReactRoastDotnet.Data.Models.Order;
 
 /// <summary>
 /// EditProductDto to edit or create a product item.

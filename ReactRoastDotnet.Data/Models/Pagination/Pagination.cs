@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.Data.Models.ResponseDto;
+namespace ReactRoastDotnet.Data.Models.Pagination;
 
 /// <summary>
 /// Pagination result that we will return to client when the request a list of products or orders.

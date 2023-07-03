@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +9,7 @@ using ReactRoastDotnet.API.Services;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Configurations;
 using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Roles;
 
 var builder = WebApplication.CreateBuilder(args);
 

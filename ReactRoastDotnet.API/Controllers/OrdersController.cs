@@ -2,11 +2,11 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ReactRoastDotnet.API.Models.ResponseDto;
 using ReactRoastDotnet.API.RequestParams;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Entities;
-using ReactRoastDotnet.Data.Models.ResponseDto;
+using ReactRoastDotnet.Data.Models.Order;
+using ReactRoastDotnet.Data.Models.Pagination;
 
 namespace ReactRoastDotnet.API.Controllers;
 
@@ -28,7 +28,7 @@ public class OrdersController : ApiController
     /// <returns>A list of previous orders.</returns>
     [Authorize]
     [HttpGet]
-    [ProducesResponseType(typeof(ProductItemListDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationList<OrderDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PaginationList<OrderDto>>> GetOrders([FromQuery] PaginationParams paginationParams)
     {
@@ -72,7 +72,7 @@ public class OrdersController : ApiController
     /// <returns>The order requested.</returns>
     [Authorize]
     [HttpGet("{id}", Name = "GetOrder")]
-    [ProducesResponseType(typeof(ProductItemListDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderDto>> GetOrder(int id)
@@ -107,7 +107,7 @@ public class OrdersController : ApiController
     /// <exception cref="Exception"></exception>
     [Authorize]
     [HttpPost]
-    [ProducesResponseType(typeof(ProductItemListDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(OrderReceiptDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<OrderReceiptDto>> CreateOrder()
     {

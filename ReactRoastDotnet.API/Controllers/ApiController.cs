@@ -7,7 +7,6 @@ namespace ReactRoastDotnet.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("Api/[controller]")]
-public class ApiController: ControllerBase 
+public class ApiController : ControllerBase
 {
-    
 }

@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.API.Models.ResponseDto;
+namespace ReactRoastDotnet.Data.Models.User;
 
 /// <summary>
 /// User data transfer object to be sent after a successful login.

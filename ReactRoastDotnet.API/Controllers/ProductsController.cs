@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ReactRoastDotnet.API.Extensions;
-using ReactRoastDotnet.API.Models.RequestDto;
-using ReactRoastDotnet.API.Models.ResponseDto;
 using ReactRoastDotnet.API.RequestParams;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Entities;
-using ReactRoastDotnet.Data.Models.ResponseDto;
+using ReactRoastDotnet.Data.Extensions;
+using ReactRoastDotnet.Data.Models.Order;
+using ReactRoastDotnet.Data.Models.Pagination;
 
 namespace ReactRoastDotnet.API.Controllers;
 
@@ -31,7 +30,7 @@ public class ProductsController : ApiController
     /// <param name="productParams">Product search query to get drink name and or search products by name or popularity.</param>
     /// <returns>Product Item list requested by user.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(ProductItemListDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationList<ProductItem>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PaginationList<ProductItem>>> GetProducts([FromQuery] ProductParams productParams)
     {
@@ -98,12 +97,13 @@ public class ProductsController : ApiController
         var newProductItem = _context.ProductItems.Add(productItem);
 
         var result = await _context.SaveChangesAsync() > 0;
-        
+
         if (!result)
         {
-            return BadRequest(new ProblemDetails{Title = "Problem creating new product."});
+            return BadRequest(new ProblemDetails { Title = "Problem creating new product." });
         }
-        return CreatedAtRoute("GetProduct", new { id = newProductItem.Entity.Id }, newProductItem.Entity.Id);
+
+        return CreatedAtRoute("GetProduct", new { id = newProductItem.Entity.Id }, newProductItem.Entity);
     }
 
     /// <summary>
@@ -124,21 +124,31 @@ public class ProductsController : ApiController
         {
             return NotFound();
         }
-        
+
         productItem.UpdateProductItem(editProductDto);
-        
+
         var result = await _context.SaveChangesAsync() > 0;
-        
+
         if (!result)
         {
-            return BadRequest(new ProblemDetails{Title = "Problem saving new edit product."});
+            return BadRequest(new ProblemDetails { Title = "Problem saving new edit product." });
         }
 
         return Ok(productItem);
     }
 
+    // DELETE: api/products/{id}
+    /// <summary>
+    /// Deletes a product item from our database.
+    /// Only accessible for admins.
+    /// </summary>
+    /// <param name="id">The product id to be deleted.</param>
+    /// <returns></returns>
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct(int id)
     {
         ProductItem? productItem = await _context.ProductItems.FirstOrDefaultAsync(item => item.Id == id);
@@ -153,9 +163,9 @@ public class ProductsController : ApiController
 
         if (!result)
         {
-            return BadRequest(new ProblemDetails{Title = "Problem deleting product item."});
+            return BadRequest(new ProblemDetails { Title = "Problem deleting product item." });
         }
-        
+
         return Ok();
     }
 

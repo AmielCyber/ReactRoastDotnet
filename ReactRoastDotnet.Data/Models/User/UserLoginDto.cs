@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ReactRoastDotnet.API.Models.RequestDto;
+namespace ReactRoastDotnet.Data.Models.User;
 
 /// <summary>
 /// Login object from a request body.

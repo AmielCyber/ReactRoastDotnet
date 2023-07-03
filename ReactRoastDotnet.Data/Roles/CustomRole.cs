@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace ReactRoastDotnet.Data.Entities;
+namespace ReactRoastDotnet.Data.Roles;
 
 public class CustomRole : IdentityRole<int>
 {

@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.Data.Models.ResponseDto;
+namespace ReactRoastDotnet.Data.Models.Cart;
 
 /// <summary>
 /// Cart Data Transfer Object to send to the user for all GET and POST to the
