@@ -9,6 +9,7 @@ using ReactRoastDotnet.API.Services;
 using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Configurations;
 using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Repositories;
 using ReactRoastDotnet.Data.Roles;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,6 +84,8 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "React Roast.NET", Version = "v1" });
 });
+// Register repositories
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

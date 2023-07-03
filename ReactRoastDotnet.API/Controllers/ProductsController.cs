@@ -1,26 +1,24 @@
+using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ReactRoastDotnet.API.RequestParams;
-using ReactRoastDotnet.Data;
 using ReactRoastDotnet.Data.Entities;
-using ReactRoastDotnet.Data.Extensions;
 using ReactRoastDotnet.Data.Models.Order;
 using ReactRoastDotnet.Data.Models.Pagination;
+using ReactRoastDotnet.Data.Repositories;
+using ReactRoastDotnet.Data.RequestParams;
 
 namespace ReactRoastDotnet.API.Controllers;
 
-// TODO: Implement a ProductService.
 /// <summary>
 /// Product CRUD controller.
 /// </summary>
 public class ProductsController : ApiController
 {
-    private readonly AppDbContext _context;
+    private readonly IProductService _productService;
 
-    public ProductsController(AppDbContext context)
+    public ProductsController(IProductService productService)
     {
-        _context = context;
+        _productService = productService;
     }
 
     // GET: api/products
@@ -34,31 +32,8 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PaginationList<ProductItem>>> GetProducts([FromQuery] ProductParams productParams)
     {
-        // Set up request query from user.
-        int skipToPageNumber = (productParams.PageNumber - 1) * productParams.PageSize;
-
-        var query = _context.ProductItems
-            .AsNoTracking()
-            .Skip(skipToPageNumber)
-            .Take(productParams.PageSize)
-            .SearchDrink(productParams.DrinkName)
-            .Sort(productParams.Sort)
-            .AsQueryable();
-
-        // Set up pagination.
-        int totalCount = await _context.ProductItems.CountAsync();
-        int totalPages = (int)Math.Ceiling(totalCount / (double)productParams.PageSize);
-
-        var pagination = new Pagination(
-            productParams.PageSize,
-            totalCount,
-            totalPages,
-            productParams.PageSize
-        );
-
-        List<ProductItem> productItems = await query.ToListAsync();
-
-        return Ok(new PaginationList<ProductItem>(productItems, pagination));
+        ErrorOr<PaginationList<ProductItem>> result = await _productService.GetAllProductItemsAsync(productParams);
+        return result.Match(Ok, GetProductProblem);
     }
 
     // GET: api/products/{id}
@@ -73,13 +48,8 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductItem>> GetProduct(int id)
     {
-        var productItem = await _context.ProductItems.FindAsync(id);
-        if (productItem is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(productItem);
+        ErrorOr<ProductItem> result = await _productService.GetProductItemAsync(id);
+        return result.Match(Ok, GetProductProblem);
     }
 
     /// <summary>
@@ -93,17 +63,14 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProductItem>> CreateProduct(EditProductDto createProductDto)
     {
-        var productItem = MapCreateProductToProductItem(createProductDto);
-        var newProductItem = _context.ProductItems.Add(productItem);
-
-        var result = await _context.SaveChangesAsync() > 0;
-
-        if (!result)
-        {
-            return BadRequest(new ProblemDetails { Title = "Problem creating new product." });
-        }
-
-        return CreatedAtRoute("GetProduct", new { id = newProductItem.Entity.Id }, newProductItem.Entity);
+        ErrorOr<ProductItem> result = await _productService.CreateNewProductItemAsync(createProductDto);
+        return result.Match(
+            createdProduct => CreatedAtAction(
+                nameof(GetProduct),
+                new { id = createdProduct.Id },
+                createdProduct
+            ),
+            GetProductProblem);
     }
 
     /// <summary>
@@ -119,22 +86,8 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductItem>> EditProduct(EditProductDto editProductDto, int id)
     {
-        var productItem = await _context.ProductItems.FindAsync(id);
-        if (productItem is null)
-        {
-            return NotFound();
-        }
-
-        productItem.UpdateProductItem(editProductDto);
-
-        var result = await _context.SaveChangesAsync() > 0;
-
-        if (!result)
-        {
-            return BadRequest(new ProblemDetails { Title = "Problem saving new edit product." });
-        }
-
-        return Ok(productItem);
+        ErrorOr<ProductItem> result = await _productService.EditExistingProductItemAsync(editProductDto, id);
+        return result.Match(Ok, GetProductProblem);
     }
 
     // DELETE: api/products/{id}
@@ -151,35 +104,20 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-        ProductItem? productItem = await _context.ProductItems.FirstOrDefaultAsync(item => item.Id == id);
-
-        if (productItem is null)
-        {
-            return NotFound();
-        }
-
-        _context.ProductItems.Remove(productItem);
-        var result = await _context.SaveChangesAsync() > 0;
-
-        if (!result)
-        {
-            return BadRequest(new ProblemDetails { Title = "Problem deleting product item." });
-        }
-
-        return Ok();
+        ErrorOr<Deleted> result = await _productService.DeleteProductItemAsync(id);
+        return result.Match(_ => Ok(), GetProductProblem);
     }
 
-    private static ProductItem MapCreateProductToProductItem(EditProductDto createProductDto)
+    private ActionResult GetProductProblem(List<Error> errors)
     {
-        return new ProductItem
+        Error firstError = errors[0];
+
+        var statusCode = firstError.NumericType switch
         {
-            Type = createProductDto.Type,
-            Name = createProductDto.Name,
-            Ounces = createProductDto.Ounces,
-            Description = createProductDto.Description,
-            Price = createProductDto.Price,
-            Image = createProductDto.Image,
-            ImageCreator = createProductDto.ImageCreator,
+            (int)ErrorType.NotFound => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError,
         };
+
+        return Problem(statusCode: statusCode, detail: firstError.Description);
     }
 }

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ReactRoastDotnet.API.RequestParams;
+namespace ReactRoastDotnet.Data.RequestParams;
 
 /// <summary>
 /// Pagination query params.
