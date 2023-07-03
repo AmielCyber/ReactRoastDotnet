@@ -6,7 +6,6 @@ namespace ReactRoastDotnet.API.Controllers;
 /// <summary>
 /// Test controller for exception handling in the client app. 
 /// </summary>
-[ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorsController : ApiController
 {
     [HttpGet("Not-Found")]
@@ -40,5 +39,10 @@ public class ErrorsController : ApiController
     public ActionResult GetServerError()
     {
         throw new Exception("This is a test error.");
+    }
+    [HttpGet("Custom-Problem")]
+    public ActionResult GetCustomProblem()
+    {
+        return Problem(statusCode: 401, detail:"Detail goes here...");
     }
 }

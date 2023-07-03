@@ -8,3 +8,5 @@ riderModule.iml
 ReactRoastDotnet.API/appsettings.Development.json
 ReactRoastDotnet.API/app.db
 ReactRoastDotnet.sln.DotSettings.user
+ReactRoastDotnet.API/app.db-shm
+ReactRoastDotnet.API/app.db-wal

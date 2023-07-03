@@ -1,4 +1,4 @@
-namespace ReactRoastDotnet.API.RequestParams;
+namespace ReactRoastDotnet.Data.RequestParams;
 
 /// <summary>
 /// Requested query for products to return from user.
