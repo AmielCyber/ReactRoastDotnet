@@ -65,7 +65,7 @@ public class AccountController : ApiController
         return result.Match(userDto => CreatedAtAction(nameof(Login), userDto), GetProblemResult);
     }
 
-    // TODO: Get rid of for full production.
+    // TODO: Get rid of for production when deployed with React.
     /// <summary>
     /// Test identity core controller.
     /// </summary>

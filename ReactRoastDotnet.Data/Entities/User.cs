@@ -6,7 +6,7 @@ namespace ReactRoastDotnet.Data.Entities;
 
 public class User : IdentityUser<int>
 {
-    [Required] public override required string Email { get; set; }
+    [Required] public override required string? Email { get; set; }
     [Required] [MaxLength(64)] public required string FirstName { get; set; }
 
     [Required] [MaxLength(64)] public required string LastName { get; set; }

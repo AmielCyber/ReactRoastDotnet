@@ -62,7 +62,7 @@ public class UserService : IUserService
         string email = userClaim?.Identity?.Name ?? string.Empty;
         var user = await _userManager.FindByEmailAsync(email);
 
-        if (user is null)
+        if (user?.Email is null)
         {
             return Errors.User.NotFound($"User with email: {email} not found.");
         }
