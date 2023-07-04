@@ -26,7 +26,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(
     // Specify the database provider
-    options => options.UseSqlite(connectionString, x => x.MigrationsAssembly("ReactRoastDotnet.Data")));
+    options => options.UseNpgsql(connectionString, x => x.MigrationsAssembly("ReactRoastDotnet.Data")));
 
 // Set up Identity Core.
 builder.Services.AddIdentityCore<User>(options => { options.User.RequireUniqueEmail = true; })

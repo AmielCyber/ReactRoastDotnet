@@ -4,6 +4,7 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 /.idea
+/.vs
 .DS_Store
 ReactRoastDotnet.API/appsettings.Development.json
 ReactRoastDotnet.API/app.db

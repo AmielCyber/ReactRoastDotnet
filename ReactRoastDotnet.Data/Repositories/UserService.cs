@@ -39,7 +39,7 @@ public class UserService : IUserService
             LastName = userRegisterDto.LastName,
             Email = userRegisterDto.Email,
             UserName = userRegisterDto.Email,
-            DateCreated = DateTime.Now
+            DateCreated = DateTime.UtcNow
         };
 
         // Validate if email is not taken and password is valid, if so then create new user.

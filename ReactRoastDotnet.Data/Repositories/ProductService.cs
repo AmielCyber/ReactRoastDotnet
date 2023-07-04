@@ -25,10 +25,10 @@ public class ProductService : IProductService
 
         var query = _context.ProductItems
             .AsNoTracking()
-            .Skip(skipToPageNumber)
-            .Take(productParams.PageSize)
-            .SearchDrink(productParams.DrinkName)
             .Sort(productParams.Sort)
+            .Take(productParams.PageSize)
+            .Skip(skipToPageNumber)
+            .SearchDrink(productParams.DrinkName)
             .AsQueryable();
 
         // Set up pagination.

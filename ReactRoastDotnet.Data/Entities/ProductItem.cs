@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReactRoastDotnet.Data.Entities;
 
@@ -27,6 +28,7 @@ public class ProductItem
 
     /// <summary>Price</summary>
     [Required]
+    [Precision(18, 2)]
     public decimal Price { get; set; }
 
     /// <summary>Image string url.</summary>

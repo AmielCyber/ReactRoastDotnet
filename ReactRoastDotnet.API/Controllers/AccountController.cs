@@ -87,7 +87,7 @@ public class AccountController : ApiController
     {
         // Generate token to serve client.
         var token = await _tokenService.GenerateToken(user);
-
+        
         return new LoggedInUserDto(user.FirstName, user.LastName, user.Email, token);
     }
 }

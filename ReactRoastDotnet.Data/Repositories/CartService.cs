@@ -158,7 +158,7 @@ public class CartService : ICartService
         var cart = new Cart
         {
             UserId = userId,
-            LastModified = DateTime.Now
+            LastModified = DateTime.UtcNow
         };
 
         _context.Carts.Add(cart);
@@ -188,7 +188,7 @@ public class CartService : ICartService
             existingCartItem.Quantity += quantity;
         }
 
-        cart.LastModified = DateTime.Now;
+        cart.LastModified = DateTime.UtcNow;
     }
 
     /// <summary>
@@ -209,6 +209,6 @@ public class CartService : ICartService
             cart.Items.Remove(existingCartItem);
         }
 
-        cart.LastModified = DateTime.Now;
+        cart.LastModified = DateTime.UtcNow;
     }
 }

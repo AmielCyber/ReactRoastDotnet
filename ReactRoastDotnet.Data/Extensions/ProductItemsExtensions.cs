@@ -8,18 +8,14 @@ public static class ProductItemsExtension
 {
     public static IQueryable<ProductItem> Sort(this IQueryable<ProductItem> query, string? sortBy)
     {
-        if (string.IsNullOrEmpty(sortBy))
-        {
-            // Short circuit. User did requested sort.
-            return query;
-        }
-
-        // TODO: Add sort by price for SQL Server or change price to Long, since SQLite does not support decimal OrderBy
+        // SQLite does not support sorting by decimal type.
         query = sortBy switch
         {
             "name" => query.OrderBy(p => p.Name),
             "popular" => query.OrderBy(p => p.Id),
-            _ => query
+            "price" => query.OrderBy(p => p.Price),
+            // Required to avoid sql warnings.
+            _ => query.OrderBy(p => p.Id)
         };
 
         return query;
