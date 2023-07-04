@@ -2,7 +2,7 @@ using ErrorOr;
 
 namespace ReactRoastDotnet.Data.Common.Errors;
 
-public partial class Errors
+public static partial class Errors
 {
     public static class User
     {
@@ -13,7 +13,7 @@ public partial class Errors
         );
 
         public static Error NotFound(string description) => Error.NotFound(
-            code: "Product.NotFound",
+            code: "User.NotFound",
             description: description
         );
 

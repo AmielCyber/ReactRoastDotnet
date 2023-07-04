@@ -1,22 +1,21 @@
-using System.Security.Claims;
+using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ReactRoastDotnet.Data;
-using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Models.Order;
 using ReactRoastDotnet.Data.Models.Pagination;
+using ReactRoastDotnet.Data.Repositories;
 using ReactRoastDotnet.Data.RequestParams;
 
 namespace ReactRoastDotnet.API.Controllers;
 
 public class OrdersController : ApiController
 {
-    private readonly AppDbContext _context;
+    private readonly IOrderService _orderService;
 
-    public OrdersController(AppDbContext context)
+    public OrdersController(IOrderService orderService)
     {
-        _context = context;
+        _orderService = orderService;
     }
 
     // GET: /api/orders
@@ -32,35 +31,8 @@ public class OrdersController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PaginationList<OrderDto>>> GetOrders([FromQuery] PaginationParams paginationParams)
     {
-        // Set up request query from user.
-        int skipToPageNumber = (paginationParams.PageNumber - 1) * paginationParams.PageSize;
-
-        int userId = GetUserId();
-
-        List<Order> orders = await _context.Orders
-            .AsNoTracking()
-            .Skip(skipToPageNumber)
-            .Take(paginationParams.PageSize)
-            .Include(o => o.Items)
-            .ThenInclude(item => item.ProductItem)
-            .Where(o => o.UserId == userId)
-            .OrderByDescending(o => o.DateCreated)
-            .ToListAsync();
-
-        // Set up pagination.
-        int totalCount = await _context.ProductItems.CountAsync();
-        int totalPages = (int)Math.Ceiling(totalCount / (double)paginationParams.PageSize);
-
-        var pagination = new Pagination(
-            paginationParams.PageSize,
-            totalCount,
-            totalPages,
-            paginationParams.PageSize
-        );
-
-        List<OrderDto> ordersDto = orders.Select(MapOrderToOrderDto).ToList();
-
-        return Ok(new PaginationList<OrderDto>(ordersDto, pagination));
+        PaginationList<OrderDto> orderList = await _orderService.GetAllFromUserAsync(paginationParams, User);
+        return orderList;
     }
 
     // GET: /api/orders/{id}
@@ -77,25 +49,8 @@ public class OrdersController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderDto>> GetOrder(int id)
     {
-        int userId = GetUserId();
-
-        Order? order = await _context.Orders
-            .Include(o => o.Items)
-            .ThenInclude(item => item.ProductItem)
-            .Where(o => o.Id == id)
-            .FirstOrDefaultAsync();
-
-        if (order is null)
-        {
-            return NotFound();
-        }
-
-        if (order.UserId != userId)
-        {
-            return Unauthorized();
-        }
-
-        return Ok(MapOrderToOrderDto(order));
+        ErrorOr<OrderDto> result = await _orderService.GetAsync(id, User);
+        return result.Match(Ok, MapErrorsToProblemResult);
     }
 
     // POST: /api/orders
@@ -111,148 +66,36 @@ public class OrdersController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<OrderReceiptDto>> CreateOrder()
     {
-        int userId = GetUserId();
-        Cart? cart = await GetCart(userId);
-
-        if (cart is null)
-        {
-            return BadRequest("Could not find cart.");
-        }
-
-        if (!cart.Items.Any())
-        {
-            return BadRequest("Can not create order on an empty cart.");
-        }
-
-        string userEmail = GetUserEmail();
-
-        Order order = GetNewOrder(cart, userId, userEmail);
-
-        var newOrder = _context.Orders.Add(order);
-        _context.Carts.Remove(cart);
-
-        bool savedSuccessfully = await _context.SaveChangesAsync() > 0;
-        if (!savedSuccessfully)
-        {
-            // TODO: Change to a custom exception.
-            throw new Exception("Failed to save new order.");
-        }
-
-        OrderReceiptDto receipt = GetReceipt(userEmail, newOrder.Entity);
-
-        return Ok(receipt);
+        ErrorOr<OrderReceiptDto> result = await _orderService.CreateOrderAsync(User);
+        return result.Match(
+            receipt => CreatedAtAction(
+                nameof(GetOrder),
+                new { id = receipt.OrderNumber },
+                receipt
+            ),
+            MapErrorsToProblemResult);
     }
 
-    private int GetUserId()
+    private ActionResult MapErrorsToProblemResult(List<Error> errors)
     {
-        var claims = User.Claims;
-        Claim? identifierClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        if (identifierClaim is null)
+        Error firstError = errors[0];
+
+        if ((int)firstError.Type == MyErrorTypes.Forbidden)
         {
-            // TODO: Change to a custom exception.
-            throw new Exception("User Id not found");
+            return Problem(statusCode: StatusCodes.Status403Forbidden, detail: firstError.Description);
+        }
+        if ((int)firstError.Type == MyErrorTypes.BadRequest)
+        {
+            return Problem(statusCode: StatusCodes.Status400BadRequest, detail: firstError.Description);
         }
 
-        var validUserId = int.TryParse(identifierClaim.Value, out var userId);
-        if (!validUserId)
+        var statusCode = firstError.Type switch
         {
-            // TODO: Change to a custom exception.
-            throw new Exception("User Id not valid");
-        }
-
-        return userId;
-    }
-
-    private string GetUserEmail()
-    {
-        var userEmail = User.Identity?.Name;
-        if (userEmail is null)
-        {
-            // TODO: Change to a custom exception.
-            throw new Exception("User email not found");
-        }
-
-        return userEmail;
-    }
-
-    private OrderReceiptDto GetReceipt(string userEmail, Order order)
-    {
-        List<CheckoutItem> checkoutItems = order.Items.Select(item => new CheckoutItem
-        {
-            ProductItemId = item.ProductItemId,
-            Name = item.ProductItem.Name,
-            Price = item.ProductItem.Price,
-            Quantity = item.Quantity
-        }).ToList();
-
-        return new OrderReceiptDto
-        {
-            OrderNumber = order.Id,
-            Email = userEmail,
-            Items = checkoutItems,
-            TotalQuantity = order.TotalQuantity,
-            TotalPrice = order.TotalPrice
-        };
-    }
-
-    private OrderDto MapOrderToOrderDto(Order order)
-    {
-        var orderItemsDto = order.Items.Select(orderItem => new OrderItemDto
-        {
-            Id = orderItem.ProductItemId,
-            Type = orderItem.ProductItem.Type,
-            Name = orderItem.ProductItem.Name,
-            Price = orderItem.ProductItem.Price,
-            Quantity = orderItem.Quantity,
-        }).ToList();
-
-
-        return new OrderDto
-        {
-            Id = order.Id,
-            OrderItems = orderItemsDto,
-            TotalQuantity = order.TotalQuantity,
-            TotalPrice = order.TotalPrice,
-            DateCreated = order.DateCreated
-        };
-    }
-
-    private async Task<Cart?> GetCart(int userId)
-    {
-        Cart? cart = await _context.Carts
-            .Include(cart => cart.Items)
-            .ThenInclude(item => item.ProductItem)
-            .FirstOrDefaultAsync(cart => cart.UserId == userId);
-        return cart;
-    }
-
-    private Order GetNewOrder(Cart cart, int? userId, string email)
-    {
-        var totalQuantity = 0;
-        var totalPrice = 0m;
-        var orderItems = new List<OrderItem>();
-
-        cart.Items.ForEach(item =>
-        {
-            orderItems.Add(new OrderItem
-            {
-                ProductItem = item.ProductItem,
-                Quantity = item.Quantity,
-                Price = item.ProductItem.Price,
-            });
-            totalQuantity += item.Quantity;
-            totalPrice += item.ProductItem.Price * item.Quantity;
-        });
-
-        var order = new Order
-        {
-            UserId = userId,
-            Email = email,
-            TotalQuantity = totalQuantity,
-            TotalPrice = totalPrice,
-            Items = orderItems,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Failure => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status500InternalServerError,
         };
 
-        return order;
+        return Problem(statusCode: statusCode, detail: firstError.Description);
     }
 }
