@@ -2,7 +2,6 @@ using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReactRoastDotnet.API.Services;
-using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Entities;
 using ReactRoastDotnet.Data.Models.User;
 using ReactRoastDotnet.Data.Repositories;
@@ -43,7 +42,7 @@ public class AccountController : ApiController
 
         if (result.IsError)
         {
-            return MapErrorsToProblemResult(result.Errors);
+            return GetProblemResult(result.Errors);
         }
 
         return await GetLoggedInUserAsync(result.Value);
@@ -63,10 +62,10 @@ public class AccountController : ApiController
     public async Task<ActionResult<UserDto>> Register(UserRegisterDto userRegisterDto)
     {
         ErrorOr<UserDto> result = await _userService.RegisterAsync(userRegisterDto);
-        return result.Match(userDto => CreatedAtAction(nameof(Login), userDto), MapErrorsToProblemResult);
+        return result.Match(userDto => CreatedAtAction(nameof(Login), userDto), GetProblemResult);
     }
 
-    // TODO: Get rid of for production.
+    // TODO: Get rid of for full production.
     /// <summary>
     /// Test identity core controller.
     /// </summary>
@@ -76,47 +75,19 @@ public class AccountController : ApiController
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         ErrorOr<UserDto> result = await _userService.GetCurrentUserAsync(User);
-        return result.Match(Ok, MapErrorsToProblemResult);
+        return result.Match(Ok, GetProblemResult);
     }
 
+    /// <summary>
+    /// Gets a user object with the access token.
+    /// </summary>
+    /// <param name="user">User object to add token.</param>
+    /// <returns>User object with access token.</returns>
     private async Task<LoggedInUserDto> GetLoggedInUserAsync(User user)
     {
         // Generate token to serve client.
         var token = await _tokenService.GenerateToken(user);
 
         return new LoggedInUserDto(user.FirstName, user.LastName, user.Email, token);
-    }
-
-    private ActionResult MapErrorsToProblemResult(List<Error> errors)
-    {
-        Error firstError = errors[0];
-
-        if (firstError.Type == ErrorType.Validation)
-        {
-            return MapValidationErrorToProblemResult(errors);
-        }
-
-        if ((int)firstError.Type == MyErrorTypes.Unauthorized)
-        {
-            return Problem(statusCode: StatusCodes.Status401Unauthorized, detail: firstError.Description);
-        }
-
-        var statusCode = firstError.Type switch
-        {
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            _ => StatusCodes.Status500InternalServerError,
-        };
-
-        return Problem(statusCode: statusCode, detail: firstError.Description);
-    }
-
-    private ActionResult MapValidationErrorToProblemResult(List<Error> errors)
-    {
-        foreach (var error in errors)
-        {
-            ModelState.AddModelError(error.Code, error.Description);
-        }
-
-        return ValidationProblem();
     }
 }

@@ -1,7 +1,6 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Models.Order;
 using ReactRoastDotnet.Data.Models.Pagination;
 using ReactRoastDotnet.Data.Repositories;
@@ -46,11 +45,12 @@ public class OrdersController : ApiController
     [HttpGet("{id}", Name = "GetOrder")]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderDto>> GetOrder(int id)
     {
         ErrorOr<OrderDto> result = await _orderService.GetAsync(id, User);
-        return result.Match(Ok, MapErrorsToProblemResult);
+        return result.Match(Ok, GetProblemResult);
     }
 
     // POST: /api/orders
@@ -64,6 +64,7 @@ public class OrdersController : ApiController
     [HttpPost]
     [ProducesResponseType(typeof(OrderReceiptDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderReceiptDto>> CreateOrder()
     {
         ErrorOr<OrderReceiptDto> result = await _orderService.CreateOrderAsync(User);
@@ -73,29 +74,6 @@ public class OrdersController : ApiController
                 new { id = receipt.OrderNumber },
                 receipt
             ),
-            MapErrorsToProblemResult);
-    }
-
-    private ActionResult MapErrorsToProblemResult(List<Error> errors)
-    {
-        Error firstError = errors[0];
-
-        if ((int)firstError.Type == MyErrorTypes.Forbidden)
-        {
-            return Problem(statusCode: StatusCodes.Status403Forbidden, detail: firstError.Description);
-        }
-        if ((int)firstError.Type == MyErrorTypes.BadRequest)
-        {
-            return Problem(statusCode: StatusCodes.Status400BadRequest, detail: firstError.Description);
-        }
-
-        var statusCode = firstError.Type switch
-        {
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            ErrorType.Failure => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status500InternalServerError,
-        };
-
-        return Problem(statusCode: statusCode, detail: firstError.Description);
+            GetProblemResult);
     }
 }

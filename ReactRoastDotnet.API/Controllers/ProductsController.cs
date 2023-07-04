@@ -33,7 +33,7 @@ public class ProductsController : ApiController
     public async Task<ActionResult<PaginationList<ProductItem>>> GetProducts([FromQuery] ProductParams productParams)
     {
         ErrorOr<PaginationList<ProductItem>> result = await _productService.GetAllItemsAsync(productParams);
-        return result.Match(Ok, GetProductProblem);
+        return result.Match(Ok, GetProblemResult);
     }
 
     // GET: api/products/{id}
@@ -49,7 +49,7 @@ public class ProductsController : ApiController
     public async Task<ActionResult<ProductItem>> GetProduct(int id)
     {
         ErrorOr<ProductItem> result = await _productService.GetItemAsync(id);
-        return result.Match(Ok, GetProductProblem);
+        return result.Match(Ok, GetProblemResult);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class ProductsController : ApiController
                 new { id = createdProduct.Id },
                 createdProduct
             ),
-            GetProductProblem);
+            GetProblemResult);
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public class ProductsController : ApiController
     public async Task<ActionResult<ProductItem>> EditProduct(EditProductDto editProductDto, int id)
     {
         ErrorOr<ProductItem> result = await _productService.EditItemAsync(editProductDto, id);
-        return result.Match(Ok, GetProductProblem);
+        return result.Match(Ok, GetProblemResult);
     }
 
     // DELETE: api/products/{id}
@@ -99,25 +99,12 @@ public class ProductsController : ApiController
     /// <returns></returns>
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct(int id)
     {
         ErrorOr<Deleted> result = await _productService.DeleteItemAsync(id);
-        return result.Match(_ => Ok(), GetProductProblem);
-    }
-
-    private ActionResult GetProductProblem(List<Error> errors)
-    {
-        Error firstError = errors[0];
-
-        var statusCode = firstError.NumericType switch
-        {
-            (int)ErrorType.NotFound => StatusCodes.Status404NotFound,
-            _ => StatusCodes.Status500InternalServerError,
-        };
-
-        return Problem(statusCode: statusCode, detail: firstError.Description);
+        return result.Match(_ => NoContent(), GetProblemResult);
     }
 }

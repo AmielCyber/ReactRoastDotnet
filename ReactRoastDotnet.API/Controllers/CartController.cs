@@ -32,7 +32,7 @@ public class CartController : ApiController
     public async Task<ActionResult<CartDto>> GetCart()
     {
         ErrorOr<CartDto> result = await _cartService.GetCartAsync(User);
-        return result.Match(Ok, MapErrorsToProblemResult);
+        return result.Match(Ok, GetProblemResult);
     }
 
 
@@ -49,7 +49,7 @@ public class CartController : ApiController
     public async Task<ActionResult<CartDto>> AddItemToCart(int id, [Range(1, 10), DefaultValue(1)] int quantity = 1)
     {
         ErrorOr<CartDto> result = await _cartService.AddProductItemAsync(User, id, quantity);
-        return result.Match(cartDto => CreatedAtAction(nameof(GetCart), cartDto), MapErrorsToProblemResult);
+        return result.Match(cartDto => CreatedAtAction(nameof(GetCart), cartDto), GetProblemResult);
     }
 
     // DELETE: api/cart
@@ -59,25 +59,13 @@ public class CartController : ApiController
     /// <param name="id">The product id in the query params to remove from the cart.</param>
     /// <param name="quantity">The quantity  number in the query params to remove from the cart.</param>
     /// <returns>No Content</returns>
-    [ProducesResponseType(typeof(CartDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [HttpDelete("Products/{id}")]
     public async Task<ActionResult> RemoveCartItem(int id, [Range(1, 10), DefaultValue(1)] int quantity = 1)
     {
         ErrorOr<Deleted> result = await _cartService.RemoveProductItemAsync(User, id, quantity);
-        return result.Match(_ => NoContent(), MapErrorsToProblemResult);
-    }
-
-    private ActionResult MapErrorsToProblemResult(List<Error> errors)
-    {
-        Error firstError = errors[0];
-
-        var statusCode = firstError.Type switch
-        {
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            _ => StatusCodes.Status500InternalServerError,
-        };
-
-        return Problem(statusCode: statusCode, detail: firstError.Description);
+        return result.Match(_ => NoContent(), GetProblemResult);
     }
 }
