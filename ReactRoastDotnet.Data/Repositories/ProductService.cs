@@ -9,7 +9,7 @@ using ReactRoastDotnet.Data.RequestParams;
 
 namespace ReactRoastDotnet.Data.Repositories;
 
-public class ProductService: IProductService
+public class ProductService : IProductService
 {
     private readonly AppDbContext _context;
 
@@ -17,8 +17,8 @@ public class ProductService: IProductService
     {
         _context = context;
     }
-    
-    public async Task<PaginationList<ProductItem>> GetAllProductItemsAsync(ProductParams productParams)
+
+    public async Task<PaginationList<ProductItem>> GetAllItemsAsync(ProductParams productParams)
     {
         // Set up request query from user.
         int skipToPageNumber = (productParams.PageNumber - 1) * productParams.PageSize;
@@ -47,17 +47,18 @@ public class ProductService: IProductService
         return new PaginationList<ProductItem>(productItems, pagination);
     }
 
-    public async Task<ErrorOr<ProductItem>> GetProductItemAsync(int id)
+    public async Task<ErrorOr<ProductItem>> GetItemAsync(int id)
     {
         var productItem = await _context.ProductItems.FindAsync(id);
         if (productItem is null)
         {
             return Errors.Product.NotFound($"Product item with id: {id} was not found.");
         }
+
         return productItem;
     }
 
-    public async Task<ErrorOr<ProductItem>> CreateNewProductItemAsync(EditProductDto createProductDto)
+    public async Task<ErrorOr<ProductItem>> CreateItemAsync(EditProductDto createProductDto)
     {
         var productItem = MapCreateProductToProductItem(createProductDto);
         var newProductItem = _context.ProductItems.Add(productItem);
@@ -72,9 +73,8 @@ public class ProductService: IProductService
         return newProductItem.Entity;
     }
 
-    public async Task<ErrorOr<ProductItem>> EditExistingProductItemAsync(EditProductDto editProductDto, int id)
+    public async Task<ErrorOr<ProductItem>> EditItemAsync(EditProductDto editProductDto, int id)
     {
-        
         var existingProductItem = await _context.ProductItems.FindAsync(id);
         if (existingProductItem is null)
         {
@@ -93,9 +93,8 @@ public class ProductService: IProductService
         return existingProductItem;
     }
 
-    public async Task<ErrorOr<Deleted>> DeleteProductItemAsync(int id)
+    public async Task<ErrorOr<Deleted>> DeleteItemAsync(int id)
     {
-        
         ProductItem? productItem = await _context.ProductItems.FirstOrDefaultAsync(item => item.Id == id);
 
         if (productItem is null)

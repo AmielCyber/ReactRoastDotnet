@@ -1,25 +1,25 @@
+using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ReactRoastDotnet.API.Services;
+using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Entities;
 using ReactRoastDotnet.Data.Models.User;
-using ReactRoastDotnet.Data.Roles;
+using ReactRoastDotnet.Data.Repositories;
 
 namespace ReactRoastDotnet.API.Controllers;
 
-// TODO: Refactor to Implement an AccountService.
 /// <summary>
 /// User Login and Registration controller.
 /// </summary>
 public class AccountController : ApiController
 {
-    private readonly UserManager<User> _userManager;
     private readonly TokenService _tokenService;
+    private readonly IUserService _userService;
 
-    public AccountController(UserManager<User> userManager, TokenService tokenService)
+    public AccountController(IUserService userService, TokenService tokenService)
     {
-        _userManager = userManager;
+        _userService = userService;
         _tokenService = tokenService;
     }
 
@@ -37,20 +37,16 @@ public class AccountController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     [HttpPost("Login")]
-    public async Task<ActionResult<UserDto>> Login(UserLoginDto userLoginDto)
+    public async Task<ActionResult<LoggedInUserDto>> Login(UserLoginDto userLoginDto)
     {
-        var user = await _userManager.FindByNameAsync(userLoginDto.Email);
+        ErrorOr<User> result = await _userService.LoginAsync(userLoginDto);
 
-        // Validate user's creds.
-        if (user is null || !await _userManager.CheckPasswordAsync(user, userLoginDto.Password))
+        if (result.IsError)
         {
-            return Unauthorized();
+            return MapErrorsToProblemResult(result.Errors);
         }
 
-        // Generate token to serve client.
-        var token = await _tokenService.GenerateToken(user);
-
-        return Ok(new UserDto(user.FirstName, user.LastName, user.Email, token));
+        return await GetLoggedInUserAsync(result.Value);
     }
 
     // TODO: Redirect to Login in our client app.
@@ -58,41 +54,16 @@ public class AccountController : ApiController
     /// Registers a new user for our application.
     /// </summary>
     /// <param name="userRegisterDto">User credentials and information.</param>
-    /// <returns>TODO</returns>
-    /// <response code="201">TODO</response>
+    /// <returns>The new user object.</returns>
+    /// <response code="201">Successful registration</response>
     /// <response code="400">If user creds has invalid input values.</response>
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [HttpPost("Register")]
-    public async Task<ActionResult> Register(UserRegisterDto userRegisterDto)
+    public async Task<ActionResult<UserDto>> Register(UserRegisterDto userRegisterDto)
     {
-        // Get user's info.
-        var user = new User
-        {
-            FirstName = userRegisterDto.FirstName,
-            LastName = userRegisterDto.LastName,
-            Email = userRegisterDto.Email,
-            UserName = userRegisterDto.Email,
-            DateCreated = DateTime.Now
-        };
-
-        // Validate if email is not taken and password is valid, if so then create new user.
-        var result = await _userManager.CreateAsync(user, userRegisterDto.Password);
-        if (!result.Succeeded)
-        {
-            // Return a list of invalid inputs. 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
-
-            return ValidationProblem();
-        }
-
-        // Add new user role in our DB.
-        await _userManager.AddToRoleAsync(user, UserRole.Name);
-
-        return StatusCode(201);
+        ErrorOr<UserDto> result = await _userService.RegisterAsync(userRegisterDto);
+        return result.Match(userDto => CreatedAtAction(nameof(Login), userDto), MapErrorsToProblemResult);
     }
 
     // TODO: Get rid of for production.
@@ -104,15 +75,48 @@ public class AccountController : ApiController
     [HttpGet("Current-User")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        string email = User?.Identity?.Name ?? string.Empty;
-        var user = await _userManager.FindByEmailAsync(email);
+        ErrorOr<UserDto> result = await _userService.GetCurrentUserAsync(User);
+        return result.Match(Ok, MapErrorsToProblemResult);
+    }
 
-        if (user is null)
+    private async Task<LoggedInUserDto> GetLoggedInUserAsync(User user)
+    {
+        // Generate token to serve client.
+        var token = await _tokenService.GenerateToken(user);
+
+        return new LoggedInUserDto(user.FirstName, user.LastName, user.Email, token);
+    }
+
+    private ActionResult MapErrorsToProblemResult(List<Error> errors)
+    {
+        Error firstError = errors[0];
+
+        if (firstError.Type == ErrorType.Validation)
         {
-            return NotFound();
+            return MapValidationErrorToProblemResult(errors);
         }
 
-        var token = await _tokenService.GenerateToken(user);
-        return new UserDto(user.FirstName, user.LastName, user.Email, token);
+        if ((int)firstError.Type == MyErrorTypes.Unauthorized)
+        {
+            return Problem(statusCode: StatusCodes.Status401Unauthorized, detail: firstError.Description);
+        }
+
+        var statusCode = firstError.Type switch
+        {
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError,
+        };
+
+        return Problem(statusCode: statusCode, detail: firstError.Description);
+    }
+
+    private ActionResult MapValidationErrorToProblemResult(List<Error> errors)
+    {
+        foreach (var error in errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+
+        return ValidationProblem();
     }
 }

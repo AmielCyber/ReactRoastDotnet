@@ -32,7 +32,7 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PaginationList<ProductItem>>> GetProducts([FromQuery] ProductParams productParams)
     {
-        ErrorOr<PaginationList<ProductItem>> result = await _productService.GetAllProductItemsAsync(productParams);
+        ErrorOr<PaginationList<ProductItem>> result = await _productService.GetAllItemsAsync(productParams);
         return result.Match(Ok, GetProductProblem);
     }
 
@@ -48,7 +48,7 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductItem>> GetProduct(int id)
     {
-        ErrorOr<ProductItem> result = await _productService.GetProductItemAsync(id);
+        ErrorOr<ProductItem> result = await _productService.GetItemAsync(id);
         return result.Match(Ok, GetProductProblem);
     }
 
@@ -63,7 +63,7 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProductItem>> CreateProduct(EditProductDto createProductDto)
     {
-        ErrorOr<ProductItem> result = await _productService.CreateNewProductItemAsync(createProductDto);
+        ErrorOr<ProductItem> result = await _productService.CreateItemAsync(createProductDto);
         return result.Match(
             createdProduct => CreatedAtAction(
                 nameof(GetProduct),
@@ -86,7 +86,7 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductItem>> EditProduct(EditProductDto editProductDto, int id)
     {
-        ErrorOr<ProductItem> result = await _productService.EditExistingProductItemAsync(editProductDto, id);
+        ErrorOr<ProductItem> result = await _productService.EditItemAsync(editProductDto, id);
         return result.Match(Ok, GetProductProblem);
     }
 
@@ -104,7 +104,7 @@ public class ProductsController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-        ErrorOr<Deleted> result = await _productService.DeleteProductItemAsync(id);
+        ErrorOr<Deleted> result = await _productService.DeleteItemAsync(id);
         return result.Match(_ => Ok(), GetProductProblem);
     }
 
