@@ -8,8 +8,7 @@ public class Cart
     [Key] public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    // TODO: Add generation for SQL Server / PostgresSQL
-    public DateTime LastModified { get; set; } = DateTime.Now;
+    public DateTime LastModified { get; set; } = DateTime.UtcNow;
 
     // Has many cart items.
     public List<CartItem> Items { get; set; } = new();

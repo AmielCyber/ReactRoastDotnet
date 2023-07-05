@@ -28,12 +28,12 @@ public class OrderService : IOrderService
 
         List<Order> orders = await _context.Orders
             .AsNoTracking()
-            .Skip(skipToPageNumber)
+            .OrderByDescending(o => o.DateCreated)
             .Take(paginationParams.PageSize)
+            .Skip(skipToPageNumber)
             .Include(o => o.Items)
             .ThenInclude(item => item.ProductItem)
             .Where(o => o.UserId == userId)
-            .OrderByDescending(o => o.DateCreated)
             .ToListAsync();
 
         // Set up pagination.

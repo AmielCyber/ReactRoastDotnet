@@ -1,7 +1,7 @@
+using System.Net.Mime;
 using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Models.Order;
 using ReactRoastDotnet.Data.Models.Pagination;
 using ReactRoastDotnet.Data.Repositories;
@@ -9,6 +9,11 @@ using ReactRoastDotnet.Data.RequestParams;
 
 namespace ReactRoastDotnet.API.Controllers;
 
+/// <summary>
+/// Orders only open to authenticated users now.
+/// Will implement guest orders in the future.
+/// </summary>
+[Produces(MediaTypeNames.Application.Json)]
 public class OrdersController : ApiController
 {
     private readonly IOrderService _orderService;
@@ -25,10 +30,12 @@ public class OrdersController : ApiController
     /// </summary>
     /// <param name="paginationParams">Page query.</param>
     /// <returns>A list of previous orders.</returns>
+    /// <response code="200">User has previous orders and is logged in.</response>
+    /// <response code="401">User is not logged in.</response>
     [Authorize]
     [HttpGet]
-    [ProducesResponseType(typeof(PaginationList<OrderDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [Produces(typeof(PaginationList<OrderDto>))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<PaginationList<OrderDto>>> GetOrders([FromQuery] PaginationParams paginationParams)
     {
         PaginationList<OrderDto> orderList = await _orderService.GetAllFromUserAsync(paginationParams, User);
@@ -42,15 +49,20 @@ public class OrdersController : ApiController
     /// </summary>
     /// <param name="id">The id of the order.</param>
     /// <returns>The order requested.</returns>
+    /// <response code="200">Return order requested.</response>
+    /// <response code="400">Invalid id type.</response>
+    /// <response code="403">User does not have access to get an order that does not belong to them.</response>
+    /// <response code="404">Order not found.</response>
     [Authorize]
     [HttpGet("{id}", Name = "GetOrder")]
-    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [Produces(typeof(OrderDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderDto>> GetOrder(int id)
     {
         ErrorOr<OrderDto> result = await _orderService.GetAsync(id, User);
-        return result.Match(Ok, MapErrorsToProblemResult);
+        return result.Match(Ok, GetProblemResult);
     }
 
     // POST: /api/orders
@@ -59,11 +71,14 @@ public class OrdersController : ApiController
     /// Creates a new order.
     /// </summary>
     /// <returns>The newly created order receipt.</returns>
-    /// <exception cref="Exception"></exception>
+    /// <response code="201">Order was created.</response>
+    /// <response code="400">Invalid body values were entered or cart has no items</response>
+    /// <response code="404">Cart was not found.</response>
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(OrderReceiptDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderReceiptDto>> CreateOrder()
     {
         ErrorOr<OrderReceiptDto> result = await _orderService.CreateOrderAsync(User);
@@ -73,29 +88,6 @@ public class OrdersController : ApiController
                 new { id = receipt.OrderNumber },
                 receipt
             ),
-            MapErrorsToProblemResult);
-    }
-
-    private ActionResult MapErrorsToProblemResult(List<Error> errors)
-    {
-        Error firstError = errors[0];
-
-        if ((int)firstError.Type == MyErrorTypes.Forbidden)
-        {
-            return Problem(statusCode: StatusCodes.Status403Forbidden, detail: firstError.Description);
-        }
-        if ((int)firstError.Type == MyErrorTypes.BadRequest)
-        {
-            return Problem(statusCode: StatusCodes.Status400BadRequest, detail: firstError.Description);
-        }
-
-        var statusCode = firstError.Type switch
-        {
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            ErrorType.Failure => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status500InternalServerError,
-        };
-
-        return Problem(statusCode: statusCode, detail: firstError.Description);
+            GetProblemResult);
     }
 }

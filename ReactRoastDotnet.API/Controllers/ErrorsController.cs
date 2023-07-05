@@ -6,6 +6,7 @@ namespace ReactRoastDotnet.API.Controllers;
 /// <summary>
 /// Test controller for exception handling in the client app. 
 /// </summary>
+[ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorsController : ApiController
 {
     [HttpGet("Not-Found")]

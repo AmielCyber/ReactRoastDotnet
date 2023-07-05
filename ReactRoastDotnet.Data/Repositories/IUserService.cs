@@ -11,6 +11,6 @@ public interface IUserService
 
     public Task<ErrorOr<UserDto>> RegisterAsync(UserRegisterDto userRegisterDto);
 
-    // TODO: Remove for full production
+    // TODO: Get rid of for full production.
     public Task<ErrorOr<UserDto>> GetCurrentUserAsync(ClaimsPrincipal user);
 }

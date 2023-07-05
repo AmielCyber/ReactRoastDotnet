@@ -17,11 +17,12 @@ public class Order
 
     [Required] public int TotalQuantity { get; set; }
 
+    [Precision(18, 2)]
     [Required] public decimal TotalPrice { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Required]
-    public DateTime DateCreated { get; set; } = DateTime.Now;
+    public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
 
     // Has many order items.

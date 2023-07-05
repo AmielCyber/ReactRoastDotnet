@@ -17,5 +17,6 @@ public class OrderItem
 
     [Required] public int Quantity { get; set; }
 
+    [Precision(18, 2)]
     [Required] public decimal Price { get; set; }
 }

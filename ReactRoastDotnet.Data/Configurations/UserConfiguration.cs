@@ -17,7 +17,7 @@ public static class UserConfiguration
                 LastName = "User",
                 UserName = "demo@gmail.com",
                 Email = "demo@gmail.com",
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
             await userManager.CreateAsync(demoUser, "P@ssw0rd");
             await userManager.AddToRoleAsync(demoUser, DemoUserRole.Name);
@@ -28,7 +28,7 @@ public static class UserConfiguration
                 LastName = "Test",
                 UserName = "test@gmail.com",
                 Email = "test@gmail.com",
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
             await userManager.CreateAsync(user, "P@ssw0rd");
             await userManager.AddToRoleAsync(user, UserRole.Name);
@@ -39,7 +39,7 @@ public static class UserConfiguration
                 LastName = "Test",
                 UserName = "admin@gmail.com",
                 Email = "admin@gmail.com",
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
 
             await userManager.CreateAsync(admin, "P@ssw0rd");

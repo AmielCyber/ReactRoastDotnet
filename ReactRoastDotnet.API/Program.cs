@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,13 +21,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Set up Database connection.
-// TODO: Change to SQLServer or PostgresSQL for production
 // Set up for EF service
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(
     // Specify the database provider
-    options => options.UseSqlite(connectionString, x => x.MigrationsAssembly("ReactRoastDotnet.Data")));
+    options => options.UseNpgsql(connectionString, x => x.MigrationsAssembly("ReactRoastDotnet.Data")));
 
 // Set up Identity Core.
 builder.Services.AddIdentityCore<User>(options => { options.User.RequireUniqueEmail = true; })
@@ -37,6 +37,8 @@ builder.Services.AddIdentityCore<User>(options => { options.User.RequireUniqueEm
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
     options =>
     {
+        var tokenValue = builder.Configuration["JWTSettings:TokenKey"] ??
+                         throw new InvalidOperationException("JWTSettings string 'TokenKey' not found.");
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,
@@ -44,7 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey =
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:TokenKey"]))
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenValue))
         };
     });
 builder.Services.AddAuthorization();
@@ -55,10 +57,9 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    // TODO: Generate OpenApi xml file.
     // Read generated XML document
-    // var file = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, file));
+    var file = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, file));
     // Set up Swagger to use a token in our header.
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
@@ -107,9 +108,10 @@ if (app.Environment.IsDevelopment())
     {
         options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5175");
     });
-    app.UseSwagger();
-    app.UseSwaggerUI(options => { options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); });
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(options => { options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); });
 
 app.UseHttpsRedirection();
 app.UseRouting();

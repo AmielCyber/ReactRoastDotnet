@@ -1,8 +1,7 @@
+using System.Net.Mime;
 using ErrorOr;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReactRoastDotnet.API.Services;
-using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Entities;
 using ReactRoastDotnet.Data.Models.User;
 using ReactRoastDotnet.Data.Repositories;
@@ -30,20 +29,21 @@ public class AccountController : ApiController
     /// </summary>
     /// <param name="userLoginDto">User credentials needed to login.</param>
     /// <returns>User object including the token to access this app's services.</returns>
-    /// <response code="200">Returns the user object along with a bearer token.</response>
-    /// <response code="400">If user creds has invalid values.</response>
-    /// <response code="401">If invalid credentials entered.</response>
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    /// <response code="200">Returns the user logged-in object along with a bearer token.</response>
+    /// <response code="400">If invalid types for password or email are entered.</response>
+    /// <response code="401">If user's credentials are invalid.</response>
     [HttpPost("Login")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json, Type = typeof(LoggedInUserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<LoggedInUserDto>> Login(UserLoginDto userLoginDto)
     {
         ErrorOr<User> result = await _userService.LoginAsync(userLoginDto);
 
         if (result.IsError)
         {
-            return MapErrorsToProblemResult(result.Errors);
+            return GetProblemResult(result.Errors);
         }
 
         return await GetLoggedInUserAsync(result.Value);
@@ -51,72 +51,40 @@ public class AccountController : ApiController
 
     // TODO: Redirect to Login in our client app.
     /// <summary>
-    /// Registers a new user for our application.
+    /// Registers a new user for this application.
     /// </summary>
-    /// <param name="userRegisterDto">User credentials and information.</param>
+    /// <param name="userRegisterDto">User's credentials and information.</param>
     /// <returns>The new user object.</returns>
-    /// <response code="201">Successful registration</response>
-    /// <response code="400">If user creds has invalid input values.</response>
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    /// <response code="201">Successfully register user to this application.</response>
+    /// <response code="400">If user credentials has invalid input values.</response>
     [HttpPost("Register")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> Register(UserRegisterDto userRegisterDto)
     {
         ErrorOr<UserDto> result = await _userService.RegisterAsync(userRegisterDto);
-        return result.Match(userDto => CreatedAtAction(nameof(Login), userDto), MapErrorsToProblemResult);
+        return result.Match(userDto => CreatedAtAction(nameof(Login), userDto), GetProblemResult);
     }
 
-    // TODO: Get rid of for production.
     /// <summary>
-    /// Test identity core controller.
+    /// Gets a user object with the access token.
     /// </summary>
-    /// <returns>A user object.</returns>
-    [Authorize]
-    [HttpGet("Current-User")]
-    public async Task<ActionResult<UserDto>> GetCurrentUser()
-    {
-        ErrorOr<UserDto> result = await _userService.GetCurrentUserAsync(User);
-        return result.Match(Ok, MapErrorsToProblemResult);
-    }
-
+    /// <param name="user">User object to add token.</param>
+    /// <returns>User object with access token.</returns>
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     private async Task<LoggedInUserDto> GetLoggedInUserAsync(User user)
     {
         // Generate token to serve client.
         var token = await _tokenService.GenerateToken(user);
 
+        if (user.Email is null)
+        {
+            throw new Exception("User email is not defined.");
+        }
+        
         return new LoggedInUserDto(user.FirstName, user.LastName, user.Email, token);
-    }
-
-    private ActionResult MapErrorsToProblemResult(List<Error> errors)
-    {
-        Error firstError = errors[0];
-
-        if (firstError.Type == ErrorType.Validation)
-        {
-            return MapValidationErrorToProblemResult(errors);
-        }
-
-        if ((int)firstError.Type == MyErrorTypes.Unauthorized)
-        {
-            return Problem(statusCode: StatusCodes.Status401Unauthorized, detail: firstError.Description);
-        }
-
-        var statusCode = firstError.Type switch
-        {
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            _ => StatusCodes.Status500InternalServerError,
-        };
-
-        return Problem(statusCode: statusCode, detail: firstError.Description);
-    }
-
-    private ActionResult MapValidationErrorToProblemResult(List<Error> errors)
-    {
-        foreach (var error in errors)
-        {
-            ModelState.AddModelError(error.Code, error.Description);
-        }
-
-        return ValidationProblem();
     }
 }
