@@ -28,16 +28,16 @@ public class OrderService : IOrderService
 
         List<Order> orders = await _context.Orders
             .AsNoTracking()
-            .OrderByDescending(o => o.DateCreated)
-            .Take(paginationParams.PageSize)
-            .Skip(skipToPageNumber)
+            .Where(o => o.UserId == userId)
             .Include(o => o.Items)
             .ThenInclude(item => item.ProductItem)
-            .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.DateCreated)
+            .Skip(skipToPageNumber)
+            .Take(paginationParams.PageSize)
             .ToListAsync();
 
         // Set up pagination.
-        int totalCount = await _context.ProductItems.CountAsync();
+        int totalCount = await _context.Orders.Where(o => o.UserId == userId).CountAsync();
         int totalPages = (int)Math.Ceiling(totalCount / (double)paginationParams.PageSize);
 
         var pagination = new Pagination(
