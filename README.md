@@ -33,7 +33,7 @@ appsettings.Development.json and replace {} with your settings:
    <br />
 
 ## Database Schema
-![SQL Draw Database Schema](/Assets/AppDbSchema.png)
+![SQL Draw Database Schema](/Assets/AppDBSchema.png)
 ## To Do
 - [ ] API testing
 - [ ] Front-end application 
