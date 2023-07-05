@@ -19,5 +19,13 @@
     <ItemGroup>
         <ProjectReference Include="..\ReactRoastDotnet.Data\ReactRoastDotnet.Data.csproj" />
     </ItemGroup>
+    
+    <!-- Generate xml documentation for openAPI -->
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <!-- Ignore warning containing methods w/o xml documentation -->
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+    
 
 </Project>
