@@ -114,6 +114,8 @@ app.UseSwagger();
 app.UseSwaggerUI(options => { options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); });
 
 app.UseHttpsRedirection();
+// TODO: Remove when React app is connected.
+app.UseWelcomePage("/");
 app.UseRouting();
 
 app.UseAuthentication();

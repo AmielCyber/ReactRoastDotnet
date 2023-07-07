@@ -5,7 +5,6 @@ namespace ReactRoastDotnet.Data.RequestParams;
 /// </summary>
 public record ProductParams : PaginationParams
 {
-    // TODO: RegEx to check accepted values?
     /// <summary>Order by: 'name','popular', or 'price'.</summary>
     public string? Sort { get; init; }
 
