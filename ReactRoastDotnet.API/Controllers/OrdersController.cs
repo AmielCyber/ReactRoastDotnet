@@ -26,7 +26,7 @@ public class OrdersController : ApiController
     // GET: /api/orders
     // TODO: Admin users can retrieve any order.
     /// <summary>
-    /// Gets a history of a user's orders.
+    /// Gets a list of orders from the logged in user.
     /// </summary>
     /// <param name="paginationParams">Page query.</param>
     /// <returns>A list of previous orders.</returns>
