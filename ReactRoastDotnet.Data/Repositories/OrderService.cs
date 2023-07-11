@@ -3,6 +3,7 @@ using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 using ReactRoastDotnet.Data.Common.Errors;
 using ReactRoastDotnet.Data.Entities;
+using ReactRoastDotnet.Data.Extensions;
 using ReactRoastDotnet.Data.Models.Order;
 using ReactRoastDotnet.Data.Models.Pagination;
 using ReactRoastDotnet.Data.RequestParams;
@@ -18,11 +19,11 @@ public class OrderService : IOrderService
         _context = context;
     }
 
-    public async Task<PaginationList<OrderDto>> GetAllFromUserAsync(PaginationParams paginationParams,
+    public async Task<PaginationList<OrderDto>> GetAllFromUserAsync(OrderParams orderParams,
         ClaimsPrincipal user)
     {
         // Set up request query from user.
-        int skipToPageNumber = (paginationParams.PageNumber - 1) * paginationParams.PageSize;
+        int skipToPageNumber = (orderParams.PageNumber - 1) * orderParams.PageSize;
 
         int userId = GetUserId(user);
 
@@ -31,20 +32,20 @@ public class OrderService : IOrderService
             .Where(o => o.UserId == userId)
             .Include(o => o.Items)
             .ThenInclude(item => item.ProductItem)
-            .OrderByDescending(o => o.DateCreated)
+            .Sort(orderParams.Sort)
             .Skip(skipToPageNumber)
-            .Take(paginationParams.PageSize)
+            .Take(orderParams.PageSize)
             .ToListAsync();
 
         // Set up pagination.
         int totalCount = await _context.Orders.Where(o => o.UserId == userId).CountAsync();
-        int totalPages = (int)Math.Ceiling(totalCount / (double)paginationParams.PageSize);
+        int totalPages = (int)Math.Ceiling(totalCount / (double)orderParams.PageSize);
 
         var pagination = new Pagination(
-            paginationParams.PageSize,
+            orderParams.PageSize,
             totalCount,
             totalPages,
-            paginationParams.PageSize
+            orderParams.PageSize
         );
 
         List<OrderDto> ordersDto = orders.Select(MapOrderToOrderDto).ToList();

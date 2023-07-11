@@ -28,7 +28,7 @@ public class OrdersController : ApiController
     /// <summary>
     /// Gets a list of orders from the logged in user.
     /// </summary>
-    /// <param name="paginationParams">Page query.</param>
+    /// <param name="orderParams">Order query.</param>
     /// <returns>A list of previous orders.</returns>
     /// <response code="200">User has previous orders and is logged in.</response>
     /// <response code="401">User is not logged in.</response>
@@ -36,9 +36,9 @@ public class OrdersController : ApiController
     [HttpGet]
     [Produces(typeof(PaginationList<OrderDto>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<PaginationList<OrderDto>>> GetOrders([FromQuery] PaginationParams paginationParams)
+    public async Task<ActionResult<PaginationList<OrderDto>>> GetOrders([FromQuery] OrderParams orderParams)
     {
-        PaginationList<OrderDto> orderList = await _orderService.GetAllFromUserAsync(paginationParams, User);
+        PaginationList<OrderDto> orderList = await _orderService.GetAllFromUserAsync(orderParams, User);
         return orderList;
     }
 

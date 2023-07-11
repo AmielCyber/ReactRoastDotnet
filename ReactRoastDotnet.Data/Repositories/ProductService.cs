@@ -39,7 +39,7 @@ public class ProductService : IProductService
             productParams.PageSize,
             totalCount,
             totalPages,
-            productParams.PageSize
+            productParams.PageNumber
         );
 
         List<ProductItem> productItems = await query.ToListAsync();
