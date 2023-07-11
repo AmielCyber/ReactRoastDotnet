@@ -9,7 +9,7 @@ namespace ReactRoastDotnet.Data.Repositories;
 
 public interface IOrderService
 {
-    public Task<PaginationList<OrderDto>> GetAllFromUserAsync(PaginationParams paginationParams, ClaimsPrincipal user);
+    public Task<PaginationList<OrderDto>> GetAllFromUserAsync(OrderParams orderParams, ClaimsPrincipal user);
     public Task<ErrorOr<OrderDto>> GetAsync(int id, ClaimsPrincipal user);
     public Task<ErrorOr<OrderReceiptDto>> CreateOrderAsync(ClaimsPrincipal user);
 }
