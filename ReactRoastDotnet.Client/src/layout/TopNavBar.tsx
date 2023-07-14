@@ -3,14 +3,13 @@ import {NavLink} from "react-router-dom";
 import CoffeeIcon from "../icons/CoffeeIcon.tsx";
 import NavigationLinks from "./NavigationLinks.tsx";
 import CartButton from "../cart/CartButton.tsx";
-import SideBarMenu from "./SideBarMenu.tsx";
 
-function NavBar() {
+function TopNavBar() {
     return (
-        <div className="navbar bg-base-100 max-w-screen-xl mx-auto">
+        <div className="navbar bg-base-100 max-w-screen-lg mx-auto hidden md:flex">
             <div className="navbar-start ml-8">
                 <NavLink className="btn btn-ghost btn-circle normal-case text-xl gap-2 group" to="/">
-                    <CoffeeIcon/>
+                    <CoffeeIcon isTopIcon={true}/>
                 </NavLink>
             </div>
             <div className="navbar-center hidden md:flex">
@@ -20,10 +19,9 @@ function NavBar() {
             </div>
             <div className="navbar-end mr-8">
                 <CartButton/>
-                <SideBarMenu/>
             </div>
         </div>
     );
 }
 
-export default NavBar;
+export default TopNavBar;
