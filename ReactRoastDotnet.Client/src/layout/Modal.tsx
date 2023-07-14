@@ -1,6 +1,6 @@
 import {Dialog, Transition} from "@headlessui/react";
 import {Fragment, useRef} from "react";
-import {XMarkIcon} from "@heroicons/react/20/solid";
+import XMarkIcon from "../icons/XMarkIcon.tsx";
 
 type Props = {
     showModal: boolean;

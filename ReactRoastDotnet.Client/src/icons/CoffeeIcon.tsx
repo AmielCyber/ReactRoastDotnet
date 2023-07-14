@@ -1,14 +1,24 @@
 import { memo } from "react";
 
+type Props = {
+  isTopIcon: boolean;
+}
+
+function getClassNameProps(isTopIcon: boolean): string{
+  return isTopIcon? "h-6 w-6 group-hover:scale-125 ease-in duration-300" :
+      "h-6 w-6";
+}
+
 /**
  * Cart Icon to display for our button.
  * Icon by svgrepo.com https://www.svgrepo.com/svg/75540/hot-coffee-cup-with-hearts
  * @returns SVG element.
  */
-function Icon() {
+function Icon(props: Props) {
   return (
     <svg
-      className="h-6 w-6 fill-primary group-hover:scale-125 ease-in duration-300"
+        fill="hsl(var(--p))"
+        className={getClassNameProps(props.isTopIcon)}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 25.468 25.468"
     >

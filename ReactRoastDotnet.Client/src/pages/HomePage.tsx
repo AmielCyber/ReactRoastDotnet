@@ -5,8 +5,8 @@ function HomePage() {
                 <div className="max-w-md text-gray-900 dark:text-white">
                     <h1 className="mb-4 text-3xl font-extrabold md:text-5xl lg:text-6xl">
                         Welcome to{" "}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-              React Coffee
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary">
+              React Roast Dotnet
             </span>{" "}
                     </h1>
                     <p className="py-4 text-xl">Order fresh coffee to go</p>
