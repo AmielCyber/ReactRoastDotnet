@@ -1,33 +1,72 @@
-import {useCallback, useState} from "react";
+import {forwardRef, Ref} from "react";
 // My imports.
 import Cart from "../models/Cart.ts";
-import EmptyCart from "./EmtpyCart";
+import CartItem from "../models/CartItem.ts";
+
+const cartDemo: Cart = {
+    items: [{id: 1, price: 5, type: "Drink", name: "coffee", quantity: 2}],
+    lastModified: new Date(Date.now())
+}
 
 type Props = {
     onClose: VoidFunction;
-    cart: Cart;
-};
-
-function CartContent(props: Props) {
-    const [isCheckout, setIsCheckout] = useState(false);
-
-    const orderHandler = useCallback(() => {
-        setIsCheckout(true);
-    }, []);
-    const cancelHandler = useCallback(() => {
-        setIsCheckout(false);
-    }, []);
-    const clearCartHandler = useCallback(() => {
-        console.log("Cleared")
-    }, []);
-
-    const totalPriceFormatted = `$${props.cart.totalPrice.toFixed(2)}`;
-    const hasItems = props.cart.totalItems > 0;
-
-    if (!hasItems) {
-        return <EmptyCart onClose={props.onClose}/>;
-    }
-    return <p>This is not ready yet and this is not suppose to show...</p>;
 }
 
-export default CartContent;
+function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
+
+
+    const totalPriceFormatted = `$${cartDemo
+        .items 
+        .reduce((total: number, curr: CartItem) => (total + curr.price) * curr.quantity, 0)
+        .toFixed(2)
+    }`;
+
+    const hasItems = cartDemo.items.length > 0;
+
+    if(!hasItems){
+        return(
+            <>
+                <p>Cart is empty</p>
+                <div className="modal-action">
+                    <button
+                        id="closeButton"
+                        key="closeButton"
+                        ref={ref}
+                        className="btn btn-sm btn-error"
+                        onClick={props.onClose}
+                    >
+                        Close
+                    </button>
+                </div>
+            </>
+        )
+    }
+
+        return(
+            <>
+            <p>Cart stuff</p>
+                <p>Total {totalPriceFormatted}</p>
+            <div className="modal-action">
+                <button
+                    id="closeButton"
+                    key="closeButton"
+                    className="btn btn-sm btn-error"
+                    onClick={props.onClose}
+                >
+                    Close
+                </button>
+                <button
+                    id="checkoutButton"
+                    key="checkoutButton"
+                    ref={ref}
+                    className="btn btn-sm btn-success"
+                    onClick={props.onClose}
+                >
+                    Checkout
+                </button>
+            </div>
+            </>
+        );
+}
+
+export default forwardRef<HTMLButtonElement, Props>(CartContent);

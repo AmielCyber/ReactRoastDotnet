@@ -1,6 +1,9 @@
-// TODO: Rewrite CartItem from our API DTO
-export interface CartItem {
-    productId: number;
-    quantity: number;
+interface CartItem {
+    id: number;
+    type: string;
+    name: string;
     price: number;
+    quantity: number;
 }
+
+export default CartItem;

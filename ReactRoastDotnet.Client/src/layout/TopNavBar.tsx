@@ -18,7 +18,7 @@ function TopNavBar() {
                 </ul>
             </div>
             <div className="navbar-end mr-8">
-                <CartButton/>
+                <CartButton isTopNav={true}/>
             </div>
         </div>
     );

@@ -21,9 +21,7 @@ function BottomNavBar(props: Props) {
                 <span className="btm-nav-label">Order</span>
             </BottomNavButton>
             {props.isAuthenticated ? <BottomNavAuthLinks/> : <BottomNavGuestLinks/>}
-            <BottomNavButton>
-                <CartButton/>
-            </BottomNavButton>
+            <CartButton isTopNav={false}/>
         </div>
     );
 }
