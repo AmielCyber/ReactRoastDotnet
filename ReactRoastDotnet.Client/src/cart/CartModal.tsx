@@ -1,19 +1,20 @@
 import {Dialog, Transition} from "@headlessui/react";
-import {Fragment, useRef} from "react";
+import {createRef, Fragment, useContext } from "react";
 import XMarkIcon from "../icons/XMarkIcon.tsx";
+import {CartContext, CartContextType} from "./CartContext.tsx";
+import CartContent from "./CartContent.tsx";
 
-type Props = {
-    showModal: boolean;
-    onClose: VoidFunction;
-    dialogTitle: string;
-    children: React.ReactNode;
-};
 
-function Modal(props: Props) {
-    const closeButtonRef = useRef(null);
+function CartModal() {
+    const {showCart, setShowCart} = useContext(CartContext) as CartContextType;
+    const submitButtonRef  = createRef<HTMLButtonElement>();
+    const closeCart = () => {
+        setShowCart(false);
+    }
+
     return (
-        <Transition appear show={props.showModal} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={props.onClose} initialFocus={closeButtonRef}>
+        <Transition appear show={showCart} as={Fragment}>
+            <Dialog as="div" className="relative z-20" onClose={closeCart} initialFocus={submitButtonRef}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -23,13 +24,13 @@ function Modal(props: Props) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    {/* Black Drop */}
+                    {/*Backdrop*/}
                     <div className="fixed inset-0 bg-black bg-opacity-25"/>
                 </Transition.Child>
                 {/* Scrollable modal. */}
                 <div className="fixed inset-0 overflow-y-auto">
-                    {/* Modal Container */}
-                    <div className="flex mt-10 justify-center p-4 text-center">
+                    {/* CartModal Container */}
+                    <div className="flex mt-10 justify-center p-4 ">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -41,13 +42,13 @@ function Modal(props: Props) {
                         >
                             <Dialog.Panel className="modal-box relative">
                                 <button
-                                    ref={closeButtonRef}
                                     className="btn btn-sm btn-primary btn-ghost btn-circle absolute left-2 top-2 text-primary"
-                                    onClick={props.onClose}
+                                    onClick={closeCart}
                                 >
                                     <XMarkIcon/>
                                 </button>
-                                {props.children}
+                                <Dialog.Title className="text-center font-bold">Your Cart</Dialog.Title>
+                                <CartContent onClose={closeCart} ref={submitButtonRef} />
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>
@@ -57,4 +58,4 @@ function Modal(props: Props) {
     );
 }
 
-export default Modal;
+export default CartModal;
