@@ -1,20 +1,20 @@
 import SignUpIcon from "../icons/SignUpIcon.tsx";
 import SignInIcon from "../icons/SignInIcon.tsx";
-import BottomNavButton from "./BottomNavButton.tsx";
+import BotNavButton from "./BotNavButton.tsx";
 
-function BottomNavGuestLinks() {
+function BotNavGuestLinks() {
     return (
         <>
-            <BottomNavButton route="account/create">
+            <BotNavButton route="account/create">
                 <SignUpIcon/>
                 <span className="btm-nav-label">Sign Up</span>
-            </BottomNavButton>
-            <BottomNavButton route="account/signin">
+            </BotNavButton>
+            <BotNavButton route="account/signin">
                 <SignInIcon/>
                 <span className="btm-nav-label">Sign In</span>
-            </BottomNavButton>
+            </BotNavButton>
         </>
     )
 }
 
-export default BottomNavGuestLinks;
+export default BotNavGuestLinks;
