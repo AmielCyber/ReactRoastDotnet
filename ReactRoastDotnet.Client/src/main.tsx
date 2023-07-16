@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {RouterProvider} from "react-router-dom";
 // My imports
-import { CartProvider } from "./cart/CartContext.tsx";
+import {CartProvider} from "./components/cart/CartContext.tsx";
 import './index.css'
 import router from "./routes.tsx"
 

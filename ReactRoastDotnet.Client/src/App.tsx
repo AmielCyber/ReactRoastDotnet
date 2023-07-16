@@ -1,16 +1,16 @@
 import {Outlet} from "react-router-dom";
-import TopNavBar from "./layout/TopNavBar.tsx";
-import BottomNavBar from "./layout/BottomNavBar.tsx";
-import CartModal from "./cart/CartModal.tsx";
+import TopNavBar from "./components/top-navbar/TopNavBar.tsx";
+import BotNavBar from "./components/bottom-navbar/BotNavBar.tsx";
+import CartModal from "./components/cart/CartModal.tsx";
 
 function App() {
 
     return (
         <>
-            <CartModal />
-            <TopNavBar/>
+            <CartModal/>
+            <TopNavBar isAuthenticated={false}/>
             <Outlet/>
-            <BottomNavBar isAuthenticated={false}/>
+            <BotNavBar isAuthenticated={false}/>
         </>
 
     );

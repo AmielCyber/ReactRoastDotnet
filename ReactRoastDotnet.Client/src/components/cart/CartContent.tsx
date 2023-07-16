@@ -1,7 +1,7 @@
 import {forwardRef, Ref} from "react";
 // My imports.
-import Cart from "../models/Cart.ts";
-import CartItem from "../models/CartItem.ts";
+import Cart from "../../models/Cart.ts";
+import CartItem from "../../models/CartItem.ts";
 
 const cartDemo: Cart = {
     items: [{id: 1, price: 5, type: "Drink", name: "coffee", quantity: 2}],
@@ -16,15 +16,15 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
 
 
     const totalPriceFormatted = `$${cartDemo
-        .items 
+        .items
         .reduce((total: number, curr: CartItem) => (total + curr.price) * curr.quantity, 0)
         .toFixed(2)
     }`;
 
     const hasItems = cartDemo.items.length > 0;
 
-    if(!hasItems){
-        return(
+    if (!hasItems) {
+        return (
             <>
                 <p>Cart is empty</p>
                 <div className="modal-action">
@@ -42,10 +42,10 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
         )
     }
 
-        return(
-            <>
+    return (
+        <>
             <p>Cart stuff</p>
-                <p>Total {totalPriceFormatted}</p>
+            <p>Total {totalPriceFormatted}</p>
             <div className="modal-action">
                 <button
                     id="closeButton"
@@ -65,8 +65,8 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
                     Checkout
                 </button>
             </div>
-            </>
-        );
+        </>
+    );
 }
 
 export default forwardRef<HTMLButtonElement, Props>(CartContent);
