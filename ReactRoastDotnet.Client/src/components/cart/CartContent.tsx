@@ -1,10 +1,19 @@
 import {forwardRef, Ref} from "react";
 // My imports.
-import Cart from "../../models/Cart.ts";
-import CartItem from "../../models/CartItem.ts";
+import type Cart from "../../models/Cart.ts";
+import {Dialog} from "@headlessui/react";
+import CartSummary from "./CartSummary.tsx";
 
 const cartDemo: Cart = {
-    items: [{id: 1, price: 5, type: "Drink", name: "coffee", quantity: 2}],
+    items: [
+        {id: 1, price: 5, type: "Drink", name: "Coffee", quantity: 2},
+        {id: 2, price: 4, type: "Drink", name: "Latte", quantity: 1},
+        {id: 3, price: 4.75, type: "Drink", name: "Cold Brew", quantity: 3},
+        {id: 4, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
+        {id: 5, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
+        {id: 6, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
+    ],
+    // items: [],
     lastModified: new Date(Date.now())
 }
 
@@ -13,44 +22,37 @@ type Props = {
 }
 
 function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
-
-
-    const totalPriceFormatted = `$${cartDemo
-        .items
-        .reduce((total: number, curr: CartItem) => (total + curr.price) * curr.quantity, 0)
-        .toFixed(2)
-    }`;
-
     const hasItems = cartDemo.items.length > 0;
 
     if (!hasItems) {
         return (
-            <>
-                <p>Cart is empty</p>
+            <div className="text-base-content">
+                <Dialog.Title className="text-center font-bold text-lg">Your Cart</Dialog.Title>
+                <p className="text-center">Your Cart is empty</p>
                 <div className="modal-action">
                     <button
                         id="closeButton"
                         key="closeButton"
                         ref={ref}
-                        className="btn btn-sm btn-error"
+                        className="btn btn-sm btn-error text-error-content"
                         onClick={props.onClose}
                     >
                         Close
                     </button>
                 </div>
-            </>
+            </div>
         )
     }
 
     return (
         <>
-            <p>Cart stuff</p>
-            <p>Total {totalPriceFormatted}</p>
+            <Dialog.Title className="text-center font-bold text-lg">Your Cart</Dialog.Title>
+            <CartSummary cart={cartDemo} />
             <div className="modal-action">
                 <button
                     id="closeButton"
                     key="closeButton"
-                    className="btn btn-sm btn-error"
+                    className="btn btn-sm btn-error text-error-content"
                     onClick={props.onClose}
                 >
                     Close
@@ -59,7 +61,7 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
                     id="checkoutButton"
                     key="checkoutButton"
                     ref={ref}
-                    className="btn btn-sm btn-success"
+                    className="btn btn-sm btn-success text-success-content"
                     onClick={props.onClose}
                 >
                     Checkout

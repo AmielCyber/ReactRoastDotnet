@@ -5,7 +5,7 @@ function Icon() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="hsl(var(--p))"
+            fill="currentcolor"
             viewBox="0 0 24 24"
             className="h-6 w-6 group-hover:scale-125 ease-in duration-300"
         >

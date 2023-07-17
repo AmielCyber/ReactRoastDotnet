@@ -7,7 +7,7 @@ function TopNavGuestLinks() {
                 Sign In
             </TopNavLink>
             <TopNavLink route="/auth/sign-up">
-                Create Account
+                Sign Up
             </TopNavLink>
         </>
     )

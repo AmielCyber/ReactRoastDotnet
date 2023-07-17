@@ -2,7 +2,7 @@ import {NavLink} from "react-router-dom";
 
 function HomePage() {
     return (
-        <main className="flex z-0 flex-col justify-center items-center ">
+        <main className="hero md:mt-auto">
             <div className="hero-content mt-8 text-center">
                 <div className="max-w-md text-gray-900 dark:text-white">
                     <h1 className="mb-4 text-3xl font-extrabold md:text-5xl lg:text-6xl">

@@ -47,7 +47,6 @@ function CartModal() {
                                 >
                                     <XMarkIcon/>
                                 </button>
-                                <Dialog.Title className="text-center font-bold">Your Cart</Dialog.Title>
                                 <CartContent onClose={closeCart} ref={submitButtonRef}/>
                             </Dialog.Panel>
                         </Transition.Child>

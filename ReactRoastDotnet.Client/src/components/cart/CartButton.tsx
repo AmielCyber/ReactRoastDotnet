@@ -4,7 +4,7 @@ import Cart from "../../models/Cart.ts";
 import {useContext} from "react";
 import {CartContext, CartContextType} from "./CartContext.tsx";
 
-const cartButtonClasses = " hover:bg-base-300";
+const cartButtonClasses = " hover:bg-base-300 text-primary hover:text-accent";
 const topCartButtonClasses = "btn btn-circle btn-ghost badge badge-sm badge-secondary" + cartButtonClasses;
 
 const cartDemo: Cart = {
@@ -24,21 +24,14 @@ function CartButton(props: Props) {
     const showCartHandler = () => {
         setShowCart(true);
     };
-    if (props.isTopNav) {
-        return (
-            <button tabIndex={0} className={topCartButtonClasses} onClick={showCartHandler}>
-                <div className="indicator">
-                    <CartIcon/>
-                    <span className="indicator-item badge badge-sm badge-secondary">{cartDemo.items.length}</span>
-                </div>
-            </button>
-        );
-    }
+
     return (
-        <button tabIndex={0} className={cartButtonClasses} onClick={showCartHandler}>
+        <button className={props.isTopNav? topCartButtonClasses : cartButtonClasses} onClick={showCartHandler}>
             <div className="indicator">
                 <CartIcon/>
-                <span className="indicator-item badge badge-sm badge-secondary">{cartDemo.items.length}</span>
+                <span className="indicator-item badge badge-sm badge-secondary text-secondary-content">
+                    {cartDemo.items.length}
+                </span>
             </div>
         </button>
     );
