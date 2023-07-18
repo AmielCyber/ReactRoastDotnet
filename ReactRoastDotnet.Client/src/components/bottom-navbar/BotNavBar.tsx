@@ -7,7 +7,7 @@ type Props = {
 
 function BotNavBar(props: Props) {
     return (
-        <nav className="btm-nav md:hidden">
+        <nav className="btm-nav btm-nav-lg md:hidden">
             <BotNavLinks isAuthenticated={props.isAuthenticated}/>
             <CartButton isTopNav={false}/>
         </nav>

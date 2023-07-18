@@ -1,3 +1,4 @@
+// My import.
 import TopNavLink from "./TopNavLink.tsx";
 
 function TopNavAuthLinks() {
