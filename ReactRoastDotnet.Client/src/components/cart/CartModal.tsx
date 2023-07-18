@@ -1,12 +1,13 @@
 import {Dialog, Transition} from "@headlessui/react";
 import {createRef, Fragment, useContext} from "react";
+// My imports.
 import XMarkIcon from "../icons/XMarkIcon.tsx";
-import {CartContext, CartContextType} from "./CartContext.tsx";
+import {CartModalContext, CartContextType} from "../../hooks/CartModalContext.tsx";
 import CartContent from "./CartContent.tsx";
 
 
 function CartModal() {
-    const {showCart, setShowCart} = useContext(CartContext) as CartContextType;
+    const {showCart, setShowCart} = useContext(CartModalContext) as CartContextType;
     const submitButtonRef = createRef<HTMLButtonElement>();
     const closeCart = () => {
         setShowCart(false);

@@ -1,28 +1,17 @@
 import {forwardRef, Ref} from "react";
-// My imports.
-import type Cart from "../../models/Cart.ts";
 import {Dialog} from "@headlessui/react";
+// My imports.
 import CartSummary from "./CartSummary.tsx";
+import {useAppSelector} from "../../store/store.ts";
 
-const cartDemo: Cart = {
-    items: [
-        {id: 1, price: 5, type: "Drink", name: "Coffee", quantity: 2},
-        {id: 2, price: 4, type: "Drink", name: "Latte", quantity: 1},
-        {id: 3, price: 4.75, type: "Drink", name: "Cold Brew", quantity: 3},
-        {id: 4, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
-        {id: 5, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
-        {id: 6, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
-    ],
-    // items: [],
-    lastModified: new Date(Date.now())
-}
 
 type Props = {
     onClose: VoidFunction;
 }
 
 function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
-    const hasItems = cartDemo.items.length > 0;
+    const { cart} = useAppSelector((state) => state.cart);
+    const hasItems = cart.items.length > 0;
 
     if (!hasItems) {
         return (
@@ -47,7 +36,7 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
     return (
         <>
             <Dialog.Title className="text-center font-bold text-lg">Your Cart</Dialog.Title>
-            <CartSummary cart={cartDemo} />
+            <CartSummary cart={cart} />
             <div className="modal-action">
                 <button
                     id="closeButton"
@@ -70,5 +59,6 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
         </>
     );
 }
+
 
 export default forwardRef<HTMLButtonElement, Props>(CartContent);
