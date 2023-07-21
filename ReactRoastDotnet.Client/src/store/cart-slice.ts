@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import type Cart from "../models/Cart";
 import type CartItem from "../models/CartItem";
-import {addItem, removeItem, removeAllItemsWithId, removeEveryItem} from "./cart-actions";
+import {addItem, removeAllItemsWithId, removeEveryItem, removeItem} from "./cart-actions";
 
 interface CartState {
     cart: Cart;
@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
         addCartItem: (state, action: PayloadAction<AddItemAction>) => {
             state.cart.items = addItem(state.cart.items, action.payload.cartItem, action.payload.quantity)
         },
-        removeCartItem: (state, action: PayloadAction<RemoveItemAction> ) => {
+        removeCartItem: (state, action: PayloadAction<RemoveItemAction>) => {
             state.cart.items = removeItem(state.cart.items, action.payload.itemId, action.payload.quantity);
         },
         removeAllCartItemsWithId: (state, action: PayloadAction<number>) => {
@@ -44,5 +44,7 @@ export const cartSlice = createSlice({
     }
 })
 
-export const  {addCartItem, removeCartItem, removeAllCartItemsWithId,
-clearCart} = cartSlice.actions;
+export const {
+    addCartItem, removeCartItem, removeAllCartItemsWithId,
+    clearCart
+} = cartSlice.actions;

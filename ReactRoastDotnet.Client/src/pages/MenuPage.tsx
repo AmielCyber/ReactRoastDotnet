@@ -1,9 +1,9 @@
 import {useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
 // My imports.
-import {getURLPageParams, pageParamType} from "../utils/paginationHelper";
-import MenuHeader from "../components/menu/MenuHeader";
-import MenuList from "../components/menu/MenuList";
+import {getURLPageParams, pageParamType} from "../pagination/paginationHelper.ts";
+import MenuHeader from "../menu/MenuHeader";
+import MenuList from "../menu/MenuList";
 
 const scrollOptions: ScrollToOptions = {
     top: 0,
@@ -30,7 +30,7 @@ function MenuPage() {
     }
 
     return (
-        <main className="max-w-screen-lg mx-auto pb-8 mb-20 md:mb-0">
+        <main className="container mx-auto max-w-screen-lg pb-8 mb-20 md:mb-0">
             <div className="flex z-0 flex-col justify-center items-center">
                 <MenuHeader/>
             </div>

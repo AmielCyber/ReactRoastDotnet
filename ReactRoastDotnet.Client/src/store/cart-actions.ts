@@ -1,19 +1,21 @@
 import type CartItem from "../models/CartItem";
+
 class NegativeQuantityError extends Error {
     constructor(msg: string) {
         super(msg);
         console.error(msg);
     }
 }
+
 function addItem(items: CartItem[], cartItem: CartItem, quantity = 1): CartItem[] {
     if (quantity < 1) {
         throw new NegativeQuantityError("cartItem must have a positive quantity value in addCartItem");
     }
-    if(items.length === 0){
+    if (items.length === 0) {
         return new Array<CartItem>(cartItem);
     }
     const existingItem = items.find(item => item.id === cartItem.id);
-    if(existingItem){
+    if (existingItem) {
         return items.map(item => {
             if (item.id === cartItem.id) {
                 return {
@@ -31,7 +33,7 @@ function addItem(items: CartItem[], cartItem: CartItem, quantity = 1): CartItem[
 }
 
 function removeItem(items: CartItem[], itemId: number, quantity?: number): CartItem[] {
-    if(items.length === 0){
+    if (items.length === 0) {
         return [];
     }
     if (quantity) {
@@ -55,7 +57,7 @@ function removeItem(items: CartItem[], itemId: number, quantity?: number): CartI
     return items.filter(item => item.id !== itemId);
 }
 
-function removeAllItemsWithId(items: CartItem[], itemId: number): CartItem[]{
+function removeAllItemsWithId(items: CartItem[], itemId: number): CartItem[] {
     return items.filter(item => item.id !== itemId);
 }
 
@@ -63,7 +65,7 @@ function removeEveryItem(): CartItem[] {
     return new Array<CartItem>();
 }
 
-function getCurrentDate(){
+function getCurrentDate() {
     return new Date(Date.now());
 }
 
