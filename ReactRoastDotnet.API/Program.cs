@@ -106,7 +106,7 @@ if (app.Environment.IsDevelopment())
 
     app.UseCors(options =>
     {
-        options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5175");
+        options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5173");
     });
 }
 
