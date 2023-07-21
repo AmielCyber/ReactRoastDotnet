@@ -5,11 +5,11 @@ import BotNavButton from "./BotNavButton.tsx";
 function BotNavGuestLinks() {
     return (
         <>
-            <BotNavButton route="account/create">
+            <BotNavButton route="auth/sign-up">
                 <SignUpIcon/>
                 <span className="btm-nav-label">Sign Up</span>
             </BotNavButton>
-            <BotNavButton route="account/signin">
+            <BotNavButton route="auth/sign-in">
                 <SignInIcon/>
                 <span className="btm-nav-label">Sign In</span>
             </BotNavButton>

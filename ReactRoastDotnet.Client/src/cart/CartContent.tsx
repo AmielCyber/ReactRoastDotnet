@@ -43,10 +43,10 @@ function Content(props: Props, ref: Ref<HTMLButtonElement>) {
         <>
             <Dialog.Title className="text-center font-bold text-lg">Your Cart</Dialog.Title>
             <CartSummary cart={cart}/>
-            <div className="modal-action">
+            <div className="modal-action flex-col md:flex-row justify-center md:justify-end items-stretch md:items-baseline gap-2 ">
                 <button
                     id="clearCart"
-                    className="btn btn-sm btn-error"
+                    className="btn btn-sm btn-error ml-2 md:ml-0"
                     onClick={handleClearCart}
                 >
                     Clear Cart

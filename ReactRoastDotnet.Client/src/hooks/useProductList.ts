@@ -11,7 +11,6 @@ const DEFAULT_PAGE_SIZE = 6;
 // Let SWR handle all errors.
 const productListFetcher = async (pageParams: string): Promise<ProductList> => {
     // Call our endpoint.
-    console.log(pageParams)
     const response: Response = await fetch(PRODUCTS_URL + pageParams, {
         method: "GET",
     });

@@ -26,7 +26,7 @@ function SignInPage() {
     const password = register("password", passwordOptions);
 
     return (
-        <main className="flex justify-center min-h-full py-24 md:py-24 mb-20 md:mb-0">
+        <main className="flex justify-center min-h-full py-6 md:py-24 mb-20 md:mb-0">
             <div className="card w-full max-w-md shadow-2xl bg-base-100">
                 <AuthFormHeader title="Sign In"/>
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}

@@ -23,7 +23,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/auth/sign-up",
-                element: <Suspense fallback={<LoadingPage pageName={"sign-in"}/>}><SignUpPage/></Suspense>
+                element: <Suspense fallback={<LoadingPage pageName={"sign-up"}/>}><SignUpPage/></Suspense>
             },
             {
                 path: "/not-found",
