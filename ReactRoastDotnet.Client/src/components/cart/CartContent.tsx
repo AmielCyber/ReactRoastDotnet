@@ -1,15 +1,15 @@
 import {forwardRef, Ref} from "react";
 import {Dialog} from "@headlessui/react";
 // My imports.
-import CartSummary from "./CartSummary.tsx";
 import {useAppSelector} from "../../store/store.ts";
+import CartSummary from "./CartSummary.tsx";
 
 
 type Props = {
     onClose: VoidFunction;
 }
 
-function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
+function Content(props: Props, ref: Ref<HTMLButtonElement>) {
     const { cart} = useAppSelector((state) => state.cart);
     const hasItems = cart.items.length > 0;
 
@@ -60,5 +60,5 @@ function CartContent(props: Props, ref: Ref<HTMLButtonElement>) {
     );
 }
 
-
-export default forwardRef<HTMLButtonElement, Props>(CartContent);
+const CartContent = forwardRef<HTMLButtonElement, Props>(Content);
+export default CartContent;

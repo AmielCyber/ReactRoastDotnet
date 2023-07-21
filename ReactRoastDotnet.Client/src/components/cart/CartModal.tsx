@@ -1,9 +1,10 @@
 import {Dialog, Transition} from "@headlessui/react";
 import {createRef, Fragment, useContext} from "react";
 // My imports.
-import XMarkIcon from "../icons/XMarkIcon.tsx";
-import {CartModalContext, CartContextType} from "../../hooks/CartModalContext.tsx";
-import CartContent from "./CartContent.tsx";
+import type {CartContextType} from "../../hooks/CartModalContext";
+import XMarkIcon from "../icons/XMarkIcon";
+import {CartModalContext} from "../../hooks/CartModalContext";
+import CartContent from "./CartContent";
 
 
 function CartModal() {
