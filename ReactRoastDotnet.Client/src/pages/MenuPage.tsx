@@ -1,9 +1,9 @@
 import {useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
 // My imports.
-import {getURLPageParams, pageParamType} from "../utils/paginationHelper";
-import MenuHeader from "../components/menu/MenuHeader";
-import MenuList from "../components/menu/MenuList";
+import {getURLPageParams, pageParamType} from "../pagination/paginationHelper.ts";
+import MenuHeader from "../menu/MenuHeader";
+import MenuList from "../menu/MenuList";
 
 const scrollOptions: ScrollToOptions = {
     top: 0,

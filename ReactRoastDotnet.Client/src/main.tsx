@@ -9,11 +9,11 @@ import './index.css'
 import router from "./routes.tsx"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <CartModalProvider>
-          <Provider store={store}>
-              <RouterProvider router={router}/>
-          </Provider>
-      </CartModalProvider>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <CartModalProvider>
+            <Provider store={store}>
+                <RouterProvider router={router}/>
+            </Provider>
+        </CartModalProvider>
+    </React.StrictMode>,
 )

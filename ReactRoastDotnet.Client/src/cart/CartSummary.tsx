@@ -1,13 +1,14 @@
 // My imports.
-import type Cart from "../../models/Cart.ts";
-import type CartItem from "../../models/CartItem.ts";
+import type Cart from "../models/Cart.ts";
+import type CartItem from "../models/CartItem.ts";
 import CartList from "./CartList.tsx";
 import CartSummaryTotal from "./CartSummaryTotal.tsx";
 
 type Props = {
     cart: Cart;
 }
-function CartSummary(props: Props){
+
+function CartSummary(props: Props) {
     let totalItems = 0;
 
     const totalPriceFormatted = `$${props.cart
@@ -19,12 +20,13 @@ function CartSummary(props: Props){
         .toFixed(2)
     }`;
 
-    return(
+    return (
         <section>
-            <CartList cart={props.cart} />
+            <CartList cart={props.cart}/>
             <CartSummaryTotal totalItems={totalItems} totalPrice={totalPriceFormatted}/>
         </section>
     )
 
 }
+
 export default CartSummary;

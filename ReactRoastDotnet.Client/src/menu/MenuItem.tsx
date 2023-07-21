@@ -1,8 +1,8 @@
 // My imports.
-import type ProductItem from "../../models/ProductItem.ts";
-import type CartItem from "../../models/CartItem.ts"
-import {useAppDispatch} from "../../store/store.ts";
-import {addCartItem} from "../../store/cart-slice.ts";
+import type ProductItem from "../models/ProductItem.ts";
+import type CartItem from "../models/CartItem.ts"
+import {useAppDispatch} from "../store/store.ts";
+import {addCartItem} from "../store/cart-slice.ts";
 
 type Props = {
     productItem: ProductItem

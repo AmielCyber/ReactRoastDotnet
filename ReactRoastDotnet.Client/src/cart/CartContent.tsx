@@ -1,8 +1,8 @@
 import {forwardRef, Ref} from "react";
 import {Dialog} from "@headlessui/react";
 // My imports.
-import {useAppDispatch, useAppSelector} from "../../store/store.ts";
-import {clearCart} from "../../store/cart-slice.ts";
+import {useAppDispatch, useAppSelector} from "../store/store.ts";
+import {clearCart} from "../store/cart-slice.ts";
 import CartSummary from "./CartSummary.tsx";
 
 

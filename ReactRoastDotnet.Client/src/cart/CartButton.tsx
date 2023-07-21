@@ -1,8 +1,8 @@
 import {useContext, useEffect, useState} from "react";
 // My imports.
-import type CartItem from "../../models/CartItem.ts";
-import {CartContextType, CartModalContext} from "../../hooks/CartModalContext.tsx";
-import {useAppSelector} from "../../store/store";
+import type CartItem from "../models/CartItem.ts";
+import {CartContextType, CartModalContext} from "../hooks/CartModalContext.tsx";
+import {useAppSelector} from "../store/store.ts";
 import CartIcon from "../icons/CartIcon.tsx";
 
 const cartButtonClasses = "hover:bg-base-300 text-primary hover:text-accent";

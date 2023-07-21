@@ -1,8 +1,8 @@
 import {Outlet} from "react-router-dom";
 // My imports.
-import TopNavBar from "./components/top-navbar/TopNavBar.tsx";
-import BotNavBar from "./components/bottom-navbar/BotNavBar.tsx";
-import CartModal from "./components/cart/CartModal.tsx";
+import TopNavBar from "./top-navbar/TopNavBar.tsx";
+import BotNavBar from "./bottom-navbar/BotNavBar.tsx";
+import CartModal from "./cart/CartModal.tsx";
 
 function App() {
 

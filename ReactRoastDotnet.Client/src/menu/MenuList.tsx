@@ -1,7 +1,7 @@
 // My imports.
 import DisplayErrorAlert from "../error/DisplayErrorAlert.tsx";
 import MenuItem from "./MenuItem.tsx";
-import useProductList from "../../hooks/useProductList.ts";
+import useProductList from "../hooks/useProductList.ts";
 import Pagination from "../pagination/Pagination.tsx";
 
 type Props = {
