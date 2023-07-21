@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage.tsx";
 import LoadingPage from "./pages/LoadingPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import SignInPage from "./pages/SignInPage.tsx";
+import SignUpPage from "./pages/SignUpPage.tsx";
 
 const MenuPage = lazy(() => import("./pages/MenuPage.tsx"));
 
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
             {
                 path: "/auth/sign-in",
                 element: <Suspense fallback={<LoadingPage pageName={"sign-in"}/>}><SignInPage/></Suspense>
+            },
+            {
+                path: "/auth/sign-up",
+                element: <Suspense fallback={<LoadingPage pageName={"sign-in"}/>}><SignUpPage/></Suspense>
             },
             {
                 path: "/not-found",
