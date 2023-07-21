@@ -8,7 +8,7 @@ type Props = {
 
 function TopNavBar(props: Props) {
     return (
-        <div className="navbar max-w-screen-lg mx-auto hidden md:flex">
+        <div className="navbar bg-base-100 opacity-90 top-0 bottom-0 sticky max-w-screen-lg mx-auto hidden md:flex z-20">
             <nav className="justify-start ml-8">
                 <ul className="menu menu-horizontal menu-lg px-1">
                     <TopNavLinks isAuthenticated={props.isAuthenticated}/>

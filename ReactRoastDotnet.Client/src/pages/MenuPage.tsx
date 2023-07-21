@@ -1,20 +1,40 @@
+import {useEffect} from "react";
+import {useSearchParams} from "react-router-dom";
+// My imports.
+import {getURLPageParams, pageParamType} from "../utils/paginationHelper";
+import MenuHeader from "../components/menu/MenuHeader";
+import MenuList from "../components/menu/MenuList";
+
+const scrollOptions: ScrollToOptions = {
+    top: 0,
+    left: 0,
+    behavior: "smooth"
+}
+
+// TODO: Add handlers for other pageParams change
 function MenuPage() {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        // Scroll to top of page on page change.
+        window.scrollTo(scrollOptions)
+    }, [searchParams])
+
+    const newPageParams = getURLPageParams(searchParams);
+
+    const handlePageChange = (pageNumber: number) => {
+        if (pageNumber > 0) {
+            newPageParams.set(pageParamType.pageNum, pageNumber.toString());
+            setSearchParams(newPageParams);
+        }
+    }
+
     return (
-        <main className="flex z-0 flex-col justify-center items-center">
-            <div className="hero-content mt-8 text-center">
-                <div className="max-w-md text-gray-900 dark:text-white">
-                    <h1 className="mb-4 text-3xl font-extrabold md:text-5xl lg:text-5xl">
-                        Order drinks
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-              {" "}
-                            to-go!
-            </span>{" "}
-                    </h1>
-                    <p className="py-4 text-xl">
-                        Our espresso drinks are made by our awesome baristas using high quality coffee beans.
-                    </p>
-                </div>
+        <main className="max-w-screen-lg mx-auto pb-8 mb-20 md:mb-0">
+            <div className="flex z-0 flex-col justify-center items-center">
+                <MenuHeader/>
             </div>
+            <MenuList pageSearchParams={newPageParams.toString()} onPageChange={handlePageChange}/>
         </main>
     );
 }
