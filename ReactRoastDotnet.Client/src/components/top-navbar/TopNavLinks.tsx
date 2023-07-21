@@ -13,8 +13,10 @@ function TopNavLinks(props: Props) {
     return (
         <>
             <TopNavLink route="/">
-                <CoffeeIcon/>
-                {" "}
+                <div className="pb-1">
+                    <CoffeeIcon/>
+                </div>
+                {" Home"}
             </TopNavLink>
             <TopNavLink route="/menu">
                 Menu

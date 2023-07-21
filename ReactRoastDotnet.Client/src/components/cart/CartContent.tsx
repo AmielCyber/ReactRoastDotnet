@@ -1,7 +1,8 @@
 import {forwardRef, Ref} from "react";
 import {Dialog} from "@headlessui/react";
 // My imports.
-import {useAppSelector} from "../../store/store.ts";
+import {useAppDispatch, useAppSelector} from "../../store/store.ts";
+import {clearCart} from "../../store/cart-slice.ts";
 import CartSummary from "./CartSummary.tsx";
 
 
@@ -10,8 +11,13 @@ type Props = {
 }
 
 function Content(props: Props, ref: Ref<HTMLButtonElement>) {
-    const { cart} = useAppSelector((state) => state.cart);
+    const {cart} = useAppSelector((state) => state.cart);
     const hasItems = cart.items.length > 0;
+    const dispatch = useAppDispatch();
+
+    const handleClearCart = () => {
+        dispatch(clearCart());
+    }
 
     if (!hasItems) {
         return (
@@ -23,7 +29,7 @@ function Content(props: Props, ref: Ref<HTMLButtonElement>) {
                         id="closeButton"
                         key="closeButton"
                         ref={ref}
-                        className="btn btn-sm btn-error text-error-content"
+                        className="btn btn-sm btn-primary"
                         onClick={props.onClose}
                     >
                         Close
@@ -36,12 +42,19 @@ function Content(props: Props, ref: Ref<HTMLButtonElement>) {
     return (
         <>
             <Dialog.Title className="text-center font-bold text-lg">Your Cart</Dialog.Title>
-            <CartSummary cart={cart} />
+            <CartSummary cart={cart}/>
             <div className="modal-action">
+                <button
+                    id="clearCart"
+                    className="btn btn-sm btn-error"
+                    onClick={handleClearCart}
+                >
+                    Clear Cart
+                </button>
                 <button
                     id="closeButton"
                     key="closeButton"
-                    className="btn btn-sm btn-error text-error-content"
+                    className="btn btn-sm btn-primary"
                     onClick={props.onClose}
                 >
                     Close
