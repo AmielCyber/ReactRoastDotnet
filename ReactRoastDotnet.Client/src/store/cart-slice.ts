@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import type Cart from "../models/Cart";
 import type CartItem from "../models/CartItem";
-import {addCartItem, removeCartItem, clearCart, getCurrentDate} from "./cart-actions";
+import {addItem, removeItem, removeAllItemsWithId, removeEveryItem} from "./cart-actions";
 
 interface CartState {
     cart: Cart;
@@ -10,17 +10,7 @@ interface CartState {
 
 const initialState: CartState = {
     cart: {
-        // TODO: Remove demo cart when we finish with product list page.
-        items: [
-            {id: 1, price: 5, type: "Drink", name: "Coffee", quantity: 2},
-            {id: 2, price: 4, type: "Drink", name: "Latte", quantity: 1},
-            {id: 3, price: 4.75, type: "Drink", name: "Cold Brew", quantity: 3},
-            {id: 4, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
-            {id: 5, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
-            {id: 6, price: 4.75, type: "Drink", name: "Machiatto", quantity: 3},
-        ],
-        //items: [],
-        lastModified: new Date(Date.now())
+        items: [],
     },
     status: "idle",
 };
@@ -30,23 +20,29 @@ type RemoveItemAction = {
     quantity?: number;
 }
 
+type AddItemAction = {
+    cartItem: CartItem;
+    quantity?: number;
+}
+
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addItem: (state, action: PayloadAction<CartItem>) => {
-            state.cart.items = addCartItem(state.cart.items, action.payload)
-            state.cart.lastModified = getCurrentDate();
+        addCartItem: (state, action: PayloadAction<AddItemAction>) => {
+            state.cart.items = addItem(state.cart.items, action.payload.cartItem, action.payload.quantity)
         },
-        removeItem: (state, action: PayloadAction<RemoveItemAction> ) => {
-            state.cart.items = removeCartItem(state.cart.items, action.payload.itemId, action.payload.quantity);
-            state.cart.lastModified = getCurrentDate();
+        removeCartItem: (state, action: PayloadAction<RemoveItemAction> ) => {
+            state.cart.items = removeItem(state.cart.items, action.payload.itemId, action.payload.quantity);
         },
-        removeAllItems: (state) => {
-            state.cart.items = clearCart();
-            state.cart.lastModified = getCurrentDate();
+        removeAllCartItemsWithId: (state, action: PayloadAction<number>) => {
+            state.cart.items = removeAllItemsWithId(state.cart.items, action.payload);
+        },
+        clearCart: (state) => {
+            state.cart.items = removeEveryItem();
         }
     }
 })
 
-export const  {addItem, removeItem, removeAllItems} = cartSlice.actions;
+export const  {addCartItem, removeCartItem, removeAllCartItemsWithId,
+clearCart} = cartSlice.actions;

@@ -1,4 +1,6 @@
+import {removeCartItem, addCartItem, removeAllCartItemsWithId} from "../../store/cart-slice.ts";
 import type CartItem from "../../models/CartItem.ts";
+import {useAppDispatch} from "../../store/store.ts";
 import TrashIcon from "./TrashIcon.tsx";
 import PlusIcon from "../icons/PlusIcon.tsx";
 import MinusIcon from "../icons/MinusIcon.tsx";
@@ -8,6 +10,7 @@ type Props = {
 }
 function CartItem(props: Props){
     const totalCost = props.item.price.toLocaleString("en-US", {style: "currency", currency: "USD"});
+    const dispatch = useAppDispatch();
 
     return(
         <li className="flex flex-col">
@@ -20,13 +23,13 @@ function CartItem(props: Props){
                     <strong className="text-emerald-500">{totalCost}</strong>
                 </section>
                 <section className="flex flex-col sm:flex-row items-center justify-center gap-2 mr-2">
-                    <button className="btn btn-sm">
+                    <button className="btn btn-sm" onClick={() => dispatch(removeAllCartItemsWithId(props.item.id))}>
                         <TrashIcon />
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn btn-sm" onClick={() => dispatch(addCartItem({cartItem: props.item}))}>
                         <PlusIcon />
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn btn-sm" onClick={() => dispatch(removeCartItem({itemId: props.item.id, quantity: 1}))}>
                         <MinusIcon />
                     </button>
                 </section>
