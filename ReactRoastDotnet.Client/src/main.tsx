@@ -4,16 +4,13 @@ import {RouterProvider} from "react-router-dom";
 import {Provider} from "react-redux";
 // My imports
 import {store} from "./store/store.ts"
-import {CartModalProvider} from "./hooks/CartModalContext.tsx";
 import './index.css'
 import router from "./routes.tsx"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <CartModalProvider>
-            <Provider store={store}>
-                <RouterProvider router={router}/>
-            </Provider>
-        </CartModalProvider>
+        <Provider store={store}>
+            <RouterProvider router={router}/>
+        </Provider>
     </React.StrictMode>,
 )

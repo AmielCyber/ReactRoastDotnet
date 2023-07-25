@@ -5,10 +5,11 @@ import App from "./App.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import LoadingPage from "./pages/LoadingPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import SignInPage from "./pages/SignInPage.tsx";
-import SignUpPage from "./pages/SignUpPage.tsx";
 
 const MenuPage = lazy(() => import("./pages/MenuPage.tsx"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage.tsx"));
+const SignInPage = lazy(() => import("./pages/SignInPage.tsx"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage.tsx"));
 
 const router = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
         children: [
             {path: "/", element: <HomePage/>},
             {path: "/menu", element: <Suspense fallback={<LoadingPage pageName={"menu"}/>}><MenuPage/></Suspense>},
+            {
+                path: "/checkout",
+                element: <Suspense fallback={<LoadingPage pageName={"checkout"}/>}><CheckoutPage/></Suspense>
+            },
             {
                 path: "/auth/sign-in",
                 element: <Suspense fallback={<LoadingPage pageName={"sign-in"}/>}><SignInPage/></Suspense>
@@ -27,7 +32,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/not-found",
-                element: <Suspense fallback={<LoadingPage pageName={"not-found"}/>}><NotFoundPage/></Suspense>
+                element: <NotFoundPage/>
             },
             {path: "*", element: <Navigate replace to="/not-found"/>},
         ],

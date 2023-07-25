@@ -9,7 +9,7 @@ function Icon() {
     return (
         <svg
             fill="currentcolor"
-            className="h-6 w-6"
+            className="h-7 w-7"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 25.468 25.468"
         >

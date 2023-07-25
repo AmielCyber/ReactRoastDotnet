@@ -4,6 +4,7 @@ import CoffeeIcon from "../icons/CoffeeIcon.tsx";
 import BagIcon from "../icons/BagIcon.tsx";
 import BotNavAuthLinks from "./BotNavAuthLinks.tsx";
 import BotNavGuestLinks from "./BotNavGuestLinks.tsx";
+import CartLink from "../cart/CartLink.tsx";
 
 type Props = {
     isAuthenticated: boolean;
@@ -21,6 +22,7 @@ function BotNavLinks(props: Props) {
                 <span className="btm-nav-label">Order</span>
             </BotNavButton>
             {props.isAuthenticated ? <BotNavAuthLinks/> : <BotNavGuestLinks/>}
+            <CartLink isTopNav={false}/>
         </>
     )
 
