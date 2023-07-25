@@ -1,8 +1,7 @@
 // My imports.
 import type ProductItem from "../models/ProductItem.ts";
 import type CartItem from "../models/CartItem.ts"
-import {useAppDispatch} from "../store/store.ts";
-import {addCartItem} from "../store/cart-slice.ts";
+import useCartStore from "../store/cartStore.ts";
 
 type Props = {
     productItem: ProductItem
@@ -19,8 +18,8 @@ function getCartItem(productItem: ProductItem): CartItem {
 }
 
 function MenuItem(props: Props) {
+    const addCartItem = useCartStore(state => state.addCartItem);
     const price = props.productItem.price.toLocaleString("en-US", {style: "currency", currency: "USD"});
-    const dispatch = useAppDispatch();
 
     return (
         <div className="card sm:card-side bg-base-100 shadow-xl pt-2">
@@ -37,10 +36,10 @@ function MenuItem(props: Props) {
                 <p className="text-emerald-600 text-lg self-center md:self-start"><strong>{price}</strong></p>
                 <p>{props.productItem.description}</p>
                 <div className="card-actions justify-center md:justify-end">
-                    <button className="btn btn-primary btn-block sm:btn-wide" onClick={() => dispatch(addCartItem({
-                        cartItem: getCartItem(props.productItem),
-                        quantity: 1
-                    }))}>+Add
+                    <button className="btn btn-primary btn-block sm:btn-wide" onClick={() =>
+                        addCartItem(getCartItem(props.productItem), 1)
+                    }>
+                        +Add
                     </button>
                 </div>
             </section>

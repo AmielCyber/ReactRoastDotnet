@@ -1,16 +1,14 @@
 // My imports
 import type CartItem from "../models/CartItem.ts";
-import type Cart from "../models/Cart.ts";
 
 type Props = {
-    cart: Cart
+    cartItems: CartItem[]
 }
 
 function CartTotal(props: Props) {
     let totalItems = 0;
 
-    const totalPriceFormatted = `$${props.cart
-        .items
+    const totalPriceFormatted = `$${props.cartItems
         .reduce((total: number, curr: CartItem) => {
             totalItems += curr.quantity;
             return (curr.price * curr.quantity) + total

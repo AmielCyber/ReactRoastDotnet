@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
 // My imports.
 import type CartItem from "../models/CartItem.ts";
-import {useAppSelector} from "../store/store.ts";
+import useCartStore from "../store/cartStore.ts";
 import CartIcon from "../icons/CartIcon.tsx";
 
 const cartLinkClasses = "hover:bg-base-300 text-primary hover:text-accent";
@@ -36,10 +36,10 @@ function GetCartLinkComponent(buttonClasses: string, indicatorClasses: string, n
 
 function CartLink(props: Props) {
     const [animateIndicator, setAnimateIndicator] = useState(true);
-    const {cart} = useAppSelector((state) => state.cart);
+    const cartItems = useCartStore(state => state.items);
 
     useEffect(() => {
-        if (cart.items.length === 0) {
+        if (cartItems.length === 0) {
             if (animateIndicator) {
                 setAnimateIndicator(false);
             }
@@ -53,9 +53,9 @@ function CartLink(props: Props) {
         return () => {
             clearTimeout(timer);
         }
-    }, [cart])
+    }, [cartItems])
 
-    const numOfItems = cart.items.reduce((count: number, currItem: CartItem) => currItem.quantity + count, 0);
+    const numOfItems = cartItems.reduce((count: number, currItem: CartItem) => currItem.quantity + count, 0);
 
     const buttonClasses = props.isTopNav ? topCartButtonClasses : cartLinkClasses;
     const indicatorClasses = animateIndicator ? activeIndicatorClasses : inactiveIndicatorClasses;

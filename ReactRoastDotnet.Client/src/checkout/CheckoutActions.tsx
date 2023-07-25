@@ -3,6 +3,7 @@ import checkoutStep from "./checkoutHelper.ts";
 
 type Props = {
     stepNum: number;
+    onClearCart?: VoidFunction;
     onBack: VoidFunction;
     onNext?: VoidFunction;
     isSubmitting?: boolean;
@@ -17,6 +18,7 @@ function CheckoutActions(props: Props) {
                         id="clearCart"
                         className="btn btn-sm btn-error"
                         type="button"
+                        onClick={props.onClearCart}
                     >
                         Clear Cart
                     </button>

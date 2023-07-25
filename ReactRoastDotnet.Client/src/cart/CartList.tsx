@@ -1,15 +1,14 @@
 // My imports.
-import type Cart from "../models/Cart.ts";
 import CartItem from "./CartItem.tsx";
 
 type Props = {
-    cart: Cart
+    cartItems: CartItem[]
 }
 
 function CartList(props: Props) {
     return (
         <ul>
-            {props.cart.items.map(item => <CartItem item={item} key={item.id}/>)}
+            {props.cartItems.map(item => <CartItem item={item} key={item.id}/>)}
         </ul>
     );
 }
