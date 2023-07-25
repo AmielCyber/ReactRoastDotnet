@@ -11,7 +11,7 @@ type Props = {
 
 function PageButtons(props: Props) {
     return (
-        <menu className="join grid grid-cols-2 ml-auto mr-auto max-w-screen-md">
+        <menu className="join grid grid-cols-2 ml-auto mr-auto max-w-screen-md px-1 sm:px-0">
             <button className={prevButtonClass} onClick={props.onPrevious} disabled={!props.hasPrevious}>
                 Previous page
             </button>
