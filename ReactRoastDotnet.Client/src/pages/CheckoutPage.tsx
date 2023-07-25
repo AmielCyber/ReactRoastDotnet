@@ -20,7 +20,7 @@ function CheckoutPage() {
     }
 
     return (
-        <main className="mx-auto max-w-screen-lg pb-2 mb-24 sm:mb-0">
+        <main className="mx-auto max-w-screen-lg pb-2 md:pb-10 mb-24 md:mb-0">
             <div className="flex flex-col">
                 <CheckoutTitle/>
                 <CheckoutStepsDisplay stepNum={stepNum}/>

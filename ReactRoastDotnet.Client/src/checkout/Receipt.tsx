@@ -7,7 +7,7 @@ function Receipt() {
                 <h2 className="text-3xl font-bold">Your Order was created!</h2>
                 <div className="flex self-center">
                     <Link className="btn btn-primary" to="/">
-                        Go to Home
+                        Go To Home
                     </Link>
                 </div>
             </div>

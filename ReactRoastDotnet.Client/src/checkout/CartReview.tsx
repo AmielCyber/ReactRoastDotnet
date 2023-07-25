@@ -2,6 +2,7 @@
 import Cart from "../cart/Cart.tsx";
 import CheckoutActions from "./CheckoutActions.tsx";
 import checkoutStep from "./checkoutHelper.ts";
+import useCartStore from "../store/cartStore.ts";
 
 type Props = {
     onNext: VoidFunction;
@@ -9,10 +10,11 @@ type Props = {
 }
 
 function CartReview(props: Props) {
+    const clearCart = useCartStore(state => state.removeEveryCartItem);
     return (
         <>
             <Cart/>
-            <CheckoutActions stepNum={checkoutStep.reviewCart} onNext={props.onNext} onBack={props.onPrev}/>
+            <CheckoutActions stepNum={checkoutStep.reviewCart} onClearCart={clearCart} onNext={props.onNext} onBack={props.onPrev}/>
         </>
     );
 }
