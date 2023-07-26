@@ -21,7 +21,7 @@ function SignUpPage() {
     } = useForm<UserSignUpRequest>()
 
     if (guestEmail) {
-        return <Navigate to={path.signUp} state={{email: guestEmail}}/>
+        return <Navigate to={path.signIn} state={{email: guestEmail}}/>
     }
 
     const submitForm = async (data: UserSignUpRequest) => {

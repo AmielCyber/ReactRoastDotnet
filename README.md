@@ -4,19 +4,41 @@ A coffee shop website using React with Vite and React Router, and ASP.NET with E
 
 ## Live Demo
 
-https://react-roast.azurewebsites.net/swagger/index.html
-
 **Note:** Please allow application to finish loading. Long loading time is due to
 a [cold start](https://azure.microsoft.com/en-us/blog/understanding-serverless-cold-start/)
 where the server and the database are being instantiated after being inactive for more than 10 minutes.
 
-You can register an account and copy the token given to the swagger's authorize button.
 
-You can also use the provided demo account:
+You can use the provided demo account if you do not want to create an account:
 <br />
 Email: `demo@gmail.com `
 <br />
 Password: `P@ssw0rd`
+
+### React Client Application
+https://react-roast.azurewebsites.net
+
+### ASP.NET Swagger/OpenAPI Specification
+https://react-roast.azurewebsites.net/swagger/index.html
+You can register an account or sign in with the demo account provided above and copy the token given to the swagger's
+authorize button.
+
+## Preview 
+![Desktop Preview](/Assets/DesktopPreview.gif)
+
+![Mobile Preview](/Assets/MobilePreview.gif)
+
+
+
+## To Do
+- [ ] Toasts for server responses
+- [ ] Save cart state for authenticated users in the database
+- [ ] Save cart state in local storage or in a cookie
+- [ ] Save authenticated user's token in cookies
+- [ ] Account page menu for viewing order history or edit account
+- [ ] Order history page
+- [ ] View receipt on order confirmation
+- [ ] User management like password and email change and also closing their account.
 
 ## Description
 
@@ -29,13 +51,13 @@ email and name.
 * Typescript and [React](https://react.dev) with [Vite](https://vitejs.dev)
 * Entity Framework
 * Identity Core
-* Postgresql
-* Azure Web App deployment
-* OpenApi/Swagger
+* [PostgreSQL](https://www.postgresql.org)
+* [Azure Web App deployment](https://azure.microsoft.com/en-us/products/app-service/web)
+* [OpenApi/Swagger](https://swagger.io)
 * React Router
-* Tailwind
-* Daisy UI
-* Redux
+* [Tailwind](https://tailwindcss.com)
+* [Daisy UI](https://daisyui.com)
+* ~~Redux~~ [Zustand](https://github.com/pmndrs/zustand)
 
 ## Local Setup
 
@@ -76,8 +98,3 @@ Server=localhost;Port={};User Id={};Password={};Database=app
 
 ![SQL Draw Database Schema](/Assets/AppDBSchema.png)
 
-## To Do
-- [ ] Guest orders
-- [ ] User management like password and email change and also closing their account.
-- [ ] API testing
-- [ ] React Front-end application 
