@@ -65,8 +65,4 @@ function removeEveryItem(): CartItem[] {
     return new Array<CartItem>();
 }
 
-function getCurrentDate() {
-    return new Date(Date.now());
-}
-
-export {addItem, removeItem, removeAllItemsWithId, removeEveryItem, getCurrentDate};
+export {addItem, removeItem, removeAllItemsWithId, removeEveryItem};

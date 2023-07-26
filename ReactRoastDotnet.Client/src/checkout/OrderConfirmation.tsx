@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-function Receipt() {
+function OrderConfirmation() {
     return (
         <section className="hero mt-6">
             <div className="hero-content flex-col text-center">
@@ -11,8 +11,7 @@ function Receipt() {
                     </Link>
                 </div>
             </div>
-        </section>
-    );
+        </section>);
 }
 
-export default Receipt
+export default OrderConfirmation

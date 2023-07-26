@@ -1,12 +1,15 @@
+import {useState} from "react";
 import {useForm} from "react-hook-form";
+import {Link, Navigate} from "react-router-dom";
 // My imports.
-import type RegisterUser from "../models/RegisterUser.ts";
+import type UserSignUpRequest from "../models/UserSignUpRequest.ts";
 import {emailOptions, nameOptions, passwordOptions} from "../auth/inputOptions.ts";
 import AuthFormHeader from "../auth/AuthFormHeader.tsx";
 import AuthInput from "../auth/AuthInput.tsx";
-import {Link} from "react-router-dom";
+import {signUp} from "../store/userActions.ts";
 
 function SignUpPage() {
+    const [guestEmail, setGuestEmail] = useState<string>();
     const {
         register,
         handleSubmit,
@@ -14,12 +17,22 @@ function SignUpPage() {
             isSubmitting,
             errors,
         }
-    } = useForm<RegisterUser>()
+    } = useForm<UserSignUpRequest>()
 
-    // TODO: CALL API
-    const submitForm = async (data: RegisterUser) => {
-        await new Promise((r) => setTimeout(r, 3000));
-        console.log(data)
+    if (guestEmail) {
+        return <Navigate to="/auth/sign-in" state={{email: guestEmail}}/>
+    }
+
+    const submitForm = async (data: UserSignUpRequest) => {
+        const result = await signUp({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            password: data.password
+        });
+        if (result.ok) {
+            setGuestEmail(result.value);
+        }
     }
     const firstName = register("firstName", nameOptions);
     const lastName = register("lastName", nameOptions);

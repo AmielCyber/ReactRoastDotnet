@@ -17,7 +17,7 @@ type Actions = {
     addCartItem: (cartItem: CartItem, quantity: number) => void;
     removeCartItem: (itemId: number, quantity: number) => void;
     removeAllCartItemsWithId: (itemId: number) => void;
-    removeEveryCartItem: () => void;
+    clearCart: () => void;
 }
 
 const useCartStore = create<CartState & Actions>((set) => ({
@@ -34,10 +34,8 @@ const useCartStore = create<CartState & Actions>((set) => ({
         set(state => {
             return ({items: removeAllItemsWithId(state.items, itemId)});
         }),
-    removeEveryCartItem: () =>
-        set(_ => {
-            return ({items: removeEveryItem()})
-        })
+    clearCart: () =>
+        set({items: removeEveryItem()})
 }))
 
 export default useCartStore;
