@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import {path} from "../routes.tsx";
 
 function NotFoundPage() {
     return (
@@ -15,7 +16,7 @@ function NotFoundPage() {
                     </h2>
                     <p className="py-6">Sorry, we could not find the page you were looking for.</p>
                     <div className="mt-2 flex items-center justify-center gap-x-6">
-                        <Link to={"/"} className="btn btn-primary">
+                        <Link to={path.home} className="btn btn-primary">
                             Go back home
                         </Link>
                     </div>

@@ -6,6 +6,7 @@ import useUserStore from "../store/userStore.ts";
 import {emailOptions, passwordOptions} from "../auth/inputOptions.ts";
 import AuthFormHeader from "../auth/AuthFormHeader.tsx";
 import AuthInput from "../auth/AuthInput.tsx";
+import {path} from "../routes.tsx";
 
 function SignInPage() {
     const {
@@ -23,7 +24,7 @@ function SignInPage() {
     const guestEmail = location.state?.email as string | undefined;
 
     if (authUser) {
-        return <Navigate to="/"/>
+        return <Navigate to={path.home}/>
     }
 
     const submitForm = async (data: LoginRequest) => {
@@ -63,7 +64,7 @@ function SignInPage() {
                         errorMsg={errors?.password?.message}
                         autoComplete="current-password"
                     />
-                    <Link to={"/auth/sign-up"} className="link-secondary">Not registered? Sign Up</Link>
+                    <Link to={path.signUp} className="link-secondary">Not registered? Sign Up</Link>
                     <div className="form-control mt-6">
                         <button className="btn btn-primary" type="submit">
                             Login

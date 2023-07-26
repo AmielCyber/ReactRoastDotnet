@@ -2,6 +2,7 @@
 import TopNavAuthLinks from "./TopNavAuthLinks.tsx";
 import TopNavGuestLinks from "./TopNavGuestLinks.tsx";
 import TopNavLink from "./TopNavLink.tsx";
+import {path} from "../routes.tsx";
 
 
 type Props = {
@@ -11,7 +12,7 @@ type Props = {
 function TopNavLinks(props: Props) {
     return (
         <>
-            <TopNavLink route="/menu">
+            <TopNavLink route={path.menu}>
                 Menu
             </TopNavLink>
             {props.isAuthenticated ? <TopNavAuthLinks/> : <TopNavGuestLinks/>}

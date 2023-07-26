@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
 // My imports.
 import type CartItem from "../models/CartItem.ts";
+import {path} from "../routes.tsx";
 import useCartStore from "../store/cartStore.ts";
 import CartIcon from "../icons/CartIcon.tsx";
 
@@ -20,7 +21,7 @@ function GetCartLinkComponent(buttonClasses: string, indicatorClasses: string, n
     return (
         <NavLink
             end
-            to="/checkout"
+            to={path.checkout}
             className={({isActive}) => isActive ? activeClass + buttonClasses : buttonClasses}
             key="cartLink"
         >

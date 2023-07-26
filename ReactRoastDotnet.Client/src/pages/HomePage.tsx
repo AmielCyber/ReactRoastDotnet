@@ -2,6 +2,7 @@ import {NavLink} from "react-router-dom";
 // My import.
 import type User from "../models/User.ts";
 import useUserStore from "../store/userStore.ts";
+import {path} from "../routes.tsx";
 
 function getGreeting(user: User | undefined) {
     if (user) {
@@ -24,7 +25,7 @@ function HomePage() {
             </span>{" "}
                     </h1>
                     <p className="py-4 text-xl">Order fresh coffee to go</p>
-                    <NavLink end to="/menu" className="link link-secondary link-hover">
+                    <NavLink end to={path.menu} className="link link-secondary link-hover">
                         <p className="hover:animate-pulse text-2xl ">
                             Order Now!
                         </p>

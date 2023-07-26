@@ -1,8 +1,9 @@
 import {useState} from "react";
+import {Link} from "react-router-dom";
 // My imports
 import useUserStore from "../store/userStore.ts";
 import UserForm from "./UserForm.tsx";
-import {Link} from "react-router-dom";
+import {path} from "../routes.tsx";
 
 type Props = {
     onNext: VoidFunction;
@@ -25,7 +26,7 @@ function SubmitOrder(props: Props) {
                 </h2>
                 <div className="flex flex-col justify-center items-center gap-4">
                     <button className="btn btn-primary" onClick={() => setContinueAsGuest(true)}>Yes</button>
-                    <Link to={"/auth/sign-in"} className="link-secondary">No? Sign In</Link>
+                    <Link to={path.signIn} className="link-secondary">No? Sign In</Link>
                 </div>
             </div>
         </section>

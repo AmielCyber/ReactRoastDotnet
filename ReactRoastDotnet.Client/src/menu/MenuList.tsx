@@ -22,7 +22,7 @@ function MenuList(props: Props) {
     if (isLoading) {
         return (
             <div className="flex">
-                <progress className="progress w-56 mx-auto"/>
+                <progress className="progress w-56 mx-auto progress-secondary"/>
             </div>
         );
     }
