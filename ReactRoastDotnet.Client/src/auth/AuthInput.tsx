@@ -14,6 +14,7 @@ type Props = {
     autoComplete?: string;
     errorMsg?: string;
     value?: string;
+    disabled?: boolean;
 }
 
 const inputClasses = "input input-bordered focus:input-primary";
@@ -44,7 +45,7 @@ function InputComponent(props: Props, ref: Ref<RefCallBack>) {
                 className={props.errorMsg ? errorInputClasses : inputClasses}
                 autoComplete={props.autoComplete}
                 value={props.value}
-                disabled={props.value}
+                disabled={props.disabled}
             />
             <p className="text-sm text-error pt-1 pl-2">{props.errorMsg ?? ""}</p>
         </div>

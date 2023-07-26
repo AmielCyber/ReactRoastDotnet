@@ -1,10 +1,11 @@
 import {useForm} from "react-hook-form";
+import {Link, Navigate, useLocation} from "react-router-dom";
 // My imports.
-import type LoginUser from "../models/LoginUser.ts";
+import type LoginRequest from "../models/LoginRequest.ts";
+import useUserStore from "../store/userStore.ts";
 import {emailOptions, passwordOptions} from "../auth/inputOptions.ts";
 import AuthFormHeader from "../auth/AuthFormHeader.tsx";
 import AuthInput from "../auth/AuthInput.tsx";
-import {Link} from "react-router-dom";
 
 function SignInPage() {
     const {
@@ -14,12 +15,22 @@ function SignInPage() {
             isSubmitting,
             errors,
         }
-    } = useForm<LoginUser>()
+    } = useForm<LoginRequest>()
+    const authUser = useUserStore(state => state.user);
+    const signInUser = useUserStore(state => state.signInUser);
+    const location = useLocation();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const guestEmail = location.state?.email as string | undefined;
 
-    // TODO: CALL API
-    const submitForm = async (data: LoginUser) => {
-        await new Promise((r) => setTimeout(r, 3000));
-        console.log(data)
+    if (authUser) {
+        return <Navigate to="/"/>
+    }
+
+    const submitForm = async (data: LoginRequest) => {
+        await signInUser({
+            email: data.email,
+            password: data.password,
+        });
     }
 
     const email = register("email", emailOptions);
@@ -40,6 +51,7 @@ function SignInPage() {
                         labelText="Email"
                         errorMsg={errors?.email?.message}
                         autoComplete="email"
+                        value={guestEmail}
                     />
                     <AuthInput
                         type="password"

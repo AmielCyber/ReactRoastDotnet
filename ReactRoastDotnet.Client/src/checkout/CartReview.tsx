@@ -10,7 +10,7 @@ type Props = {
 }
 
 function CartReview(props: Props) {
-    const clearCart = useCartStore(state => state.removeEveryCartItem);
+    const clearCart = useCartStore(state => state.clearCart);
     return (
         <>
             <Cart/>

@@ -1,7 +1,7 @@
 import {useForm} from "react-hook-form";
-import {Link} from "react-router-dom";
 // My imports
-import type RegisterUser from "../models/RegisterUser.ts";
+import type UserSignUpRequest from "../models/UserSignUpRequest.ts";
+import type AuthUser from "../models/AuthUser.ts";
 import useCartStore from "../store/cartStore.ts";
 import {emailOptions, nameOptions} from "../auth/inputOptions.ts";
 import AuthInput from "../auth/AuthInput.tsx";
@@ -11,6 +11,7 @@ import checkoutStep from "./checkoutHelper.ts";
 type Props = {
     onNext: VoidFunction;
     onPrev: VoidFunction;
+    user?: AuthUser;
 }
 
 function UserForm(props: Props) {
@@ -21,11 +22,18 @@ function UserForm(props: Props) {
             isSubmitting,
             errors,
         }
-    } = useForm<RegisterUser>()
-    const clearCart = useCartStore(state => state.removeEveryCartItem);
+    } = useForm<UserSignUpRequest>({
+        defaultValues: {
+            firstName: props.user?.firstName,
+            lastName: props.user?.lastName,
+            email: props.user?.email,
+        }
+    })
 
-    // TODO: CALL API
-    const submitForm = async (data: RegisterUser) => {
+    const clearCart = useCartStore(state => state.clearCart);
+
+    // TODO: CALL ORDER API
+    const submitForm = async (data: UserSignUpRequest) => {
         await new Promise((r) => setTimeout(r, 3000));
         console.log(data)
         clearCart();
@@ -36,9 +44,11 @@ function UserForm(props: Props) {
     const lastName = register("lastName", nameOptions);
     const email = register("email", emailOptions);
 
+    const isGuest = props.user === undefined;
+
     return (
         <section>
-            <h2 className="text-center text-xl mt-4 font-bold">Order Details</h2>
+            <h2 className="text-center text-xl mt-4 font-bold">{isGuest && "Enter "}Order Details</h2>
             {/*eslint-disable-next-line @typescript-eslint/no-misused-promises*/}
             <form className="card-body" onSubmit={handleSubmit(submitForm)}>
                 <AuthInput
@@ -50,6 +60,8 @@ function UserForm(props: Props) {
                     labelText="First Name"
                     errorMsg={errors?.firstName?.message}
                     autoComplete="given-name"
+                    value={props.user?.firstName}
+                    disabled={!!props.user}
                 />
                 <AuthInput
                     ref={lastName.ref}
@@ -60,6 +72,8 @@ function UserForm(props: Props) {
                     labelText="Last Name"
                     errorMsg={errors?.lastName?.message}
                     autoComplete="family-name"
+                    value={props.user?.lastName}
+                    disabled={!!props.user}
                 />
                 <AuthInput
                     ref={email.ref}
@@ -70,10 +84,12 @@ function UserForm(props: Props) {
                     labelText="Email"
                     errorMsg={errors?.email?.message}
                     autoComplete="email"
+                    value={props.user?.email}
+                    disabled={!!props.user}
                 />
-                <Link to={"/auth/sign-in"} className="link-secondary">Already registered? Sign In</Link>
                 <div className="form-control mt-6">
-                    <CheckoutActions stepNum={checkoutStep.submitOrder} isSubmitting={isSubmitting} onBack={props.onPrev}/>
+                    <CheckoutActions stepNum={checkoutStep.submitOrder} isSubmitting={isSubmitting}
+                                     onBack={props.onPrev}/>
                 </div>
             </form>
 

@@ -1,16 +1,12 @@
 // My import.
-import TopNavLink from "./TopNavLink.tsx";
+import SignOutButton from "./SignOutButton.tsx";
 
+// TODO: Add Account Link
 function TopNavAuthLinks() {
     return (
-        <>
-            <TopNavLink route="/account">
-                Account
-            </TopNavLink>
-            <TopNavLink route="/account/sign-out">
-                Sign Out
-            </TopNavLink>
-        </>
+        <li>
+            <SignOutButton/>
+        </li>
     )
 }
 
