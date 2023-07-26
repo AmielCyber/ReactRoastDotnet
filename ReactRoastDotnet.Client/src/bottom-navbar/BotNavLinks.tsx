@@ -1,5 +1,6 @@
 // My imports.
 import BotNavButton from "./BotNavButton.tsx";
+import {path} from "../routes.tsx";
 import CoffeeIcon from "../icons/CoffeeIcon.tsx";
 import BagIcon from "../icons/BagIcon.tsx";
 import BotNavAuthLinks from "./BotNavAuthLinks.tsx";
@@ -13,11 +14,11 @@ type Props = {
 function BotNavLinks(props: Props) {
     return (
         <>
-            <BotNavButton route="/">
+            <BotNavButton route={path.home}>
                 <CoffeeIcon/>
                 <span className="btm-nav-label">Home</span>
             </BotNavButton>
-            <BotNavButton route="menu">
+            <BotNavButton route={path.menu}>
                 <BagIcon/>
                 <span className="btm-nav-label">Order</span>
             </BotNavButton>

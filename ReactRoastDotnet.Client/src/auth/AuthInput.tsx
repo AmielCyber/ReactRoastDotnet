@@ -17,7 +17,7 @@ type Props = {
     disabled?: boolean;
 }
 
-const inputClasses = "input input-bordered focus:input-primary";
+const inputClasses = "input input-bordered focus:input-primary dark:text-white";
 const errorInputClasses = "input input-bordered input-error";
 const labelClasses = "label-text";
 const errorLabelClasses = "label-text text-error";

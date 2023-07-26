@@ -7,6 +7,7 @@ import {emailOptions, nameOptions, passwordOptions} from "../auth/inputOptions.t
 import AuthFormHeader from "../auth/AuthFormHeader.tsx";
 import AuthInput from "../auth/AuthInput.tsx";
 import {signUp} from "../store/userActions.ts";
+import {path} from "../routes.tsx";
 
 function SignUpPage() {
     const [guestEmail, setGuestEmail] = useState<string>();
@@ -20,7 +21,7 @@ function SignUpPage() {
     } = useForm<UserSignUpRequest>()
 
     if (guestEmail) {
-        return <Navigate to="/auth/sign-in" state={{email: guestEmail}}/>
+        return <Navigate to={path.signIn} state={{email: guestEmail}}/>
     }
 
     const submitForm = async (data: UserSignUpRequest) => {
@@ -85,7 +86,7 @@ function SignUpPage() {
                         errorMsg={errors?.password?.message}
                         autoComplete="new-password"
                     />
-                    <Link to={"/auth/sign-in"} className="link-secondary">Already registered? Sign In</Link>
+                    <Link to={path.signIn} className="link-secondary">Already registered? Sign In</Link>
                     <div className="form-control mt-6">
                         <button className="btn btn-primary" type="submit">
                             Sign Up

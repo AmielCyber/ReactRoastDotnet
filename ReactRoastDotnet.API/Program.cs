@@ -94,8 +94,14 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 var app = builder.Build();
 
 // Add global middleware.
-app.UseMiddleware<ExceptionMiddleware>();
 
+
+app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI(options => { options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); });
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseDefaultFiles(); // Serve default file from wwwroot w/o requesting URL file name.
+app.UseStaticFiles(); // Set up middleware to serve static content (React).
 if (app.Environment.IsDevelopment())
 {
     var scope = app.Services.CreateScope();
@@ -103,24 +109,20 @@ if (app.Environment.IsDevelopment())
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     await UserConfiguration.Initialize(context, userManager);
 
-
     app.UseCors(options =>
     {
         options.AllowAnyHeader().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5173");
     });
 }
 
-app.UseSwagger();
-app.UseSwaggerUI(options => { options.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); });
-
-app.UseHttpsRedirection();
-// TODO: Remove when React app is connected.
-app.UseWelcomePage("/");
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToController("Index",
+    "Fallback"); // Tell our server how to handle paths that it doesnt know of but React does.
+// End up setting up middleware to the pipeline.
 
 app.Run();
