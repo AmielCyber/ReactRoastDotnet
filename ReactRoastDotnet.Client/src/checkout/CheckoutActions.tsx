@@ -7,6 +7,7 @@ type Props = {
     onBack: VoidFunction;
     onNext?: VoidFunction;
     isSubmitting?: boolean;
+    disableOnNext?:  boolean;
 }
 
 function CheckoutActions(props: Props) {
@@ -43,7 +44,7 @@ function CheckoutActions(props: Props) {
                     className="btn btn-sm btn-success"
                     type={props.stepNum === checkoutStep.submitOrder ? "submit" : "button"}
                     onClick={props.onNext}
-                    disabled={props.stepNum === checkoutStep.receipt}
+                    disabled={props.stepNum === checkoutStep.receipt || props.disableOnNext}
                 >
                     {props.stepNum === checkoutStep.submitOrder ? "Submit" : "Next"}
                     {props.isSubmitting && <span className="loading loading-spinner"></span>}

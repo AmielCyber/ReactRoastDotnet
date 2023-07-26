@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {useForm} from "react-hook-form";
 // My imports
 import type UserSignUpRequest from "../models/UserSignUpRequest.ts";
@@ -15,6 +16,7 @@ type Props = {
 }
 
 function UserForm(props: Props) {
+    const [isNotChecked, setIsNotChecked] = useState(true);
     const {
         register,
         handleSubmit,
@@ -29,8 +31,10 @@ function UserForm(props: Props) {
             email: props.user?.email,
         }
     })
-
     const clearCart = useCartStore(state => state.clearCart);
+
+
+    const onChecked = () => setIsNotChecked(!isNotChecked);
 
     // TODO: CALL ORDER API
     const submitForm = async (data: UserSignUpRequest) => {
@@ -39,6 +43,7 @@ function UserForm(props: Props) {
         clearCart();
         props.onNext();
     }
+
 
     const firstName = register("firstName", nameOptions);
     const lastName = register("lastName", nameOptions);
@@ -87,9 +92,13 @@ function UserForm(props: Props) {
                     value={props.user?.email}
                     disabled={!!props.user}
                 />
+                <label className="label cursor-pointer">
+                    <span className="label-text">I understand this is a demo application; therefore, no actual order will be placed.</span>
+                    <input type="checkbox" className="checkbox checkbox-primary" onClick={onChecked}/>
+                </label>
                 <div className="form-control mt-6">
                     <CheckoutActions stepNum={checkoutStep.submitOrder} isSubmitting={isSubmitting}
-                                     onBack={props.onPrev}/>
+                                     onBack={props.onPrev} disableOnNext={isNotChecked}/>
                 </div>
             </form>
 
