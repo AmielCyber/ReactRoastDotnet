@@ -2,8 +2,13 @@
 import type ProblemDetails from "../models/ProblemDetails.ts";
 
 function getTitle(result: unknown, errorMessage?: string) {
-    if (typeof result === "object" && result !== null && "title" in result && typeof result.title === "string") {
-        return result.title;
+    if (typeof result === "object" && result !== null) {
+        if ("title" in result && typeof result.title === "string") {
+            return result.title;
+        }
+        if ("statusText" in result && typeof result.statusText === "string") {
+            return result.statusText;
+        }
     }
     if (errorMessage) {
         return errorMessage;
@@ -25,11 +30,15 @@ function getDetail(result: unknown): string | undefined {
 }
 
 function getErrors(result: unknown): Record<string, string[]> | undefined {
-    if (typeof result === "object" && result !== null && "errors" in result && typeof result.errors === "object") {
+    if (typeof result === "object"
+        && result !== null
+        && "errors" in result
+        && typeof result.errors === "object"
+        && result.errors !== null
+    ) {
         return result.errors as Record<string, string[]>;
     }
 }
-
 
 function getProblemDetails(responseResult: unknown, errorMessage?: string): ProblemDetails {
     return {

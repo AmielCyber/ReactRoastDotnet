@@ -2,7 +2,7 @@ import type AuthUser from "../models/AuthUser";
 import type LoginRequest from "../models/LoginRequest.ts";
 import type Result from "../models/Result.ts";
 import type UserSignUpRequest from "../models/UserSignUpRequest.ts";
-import getProblemDetails from "../error/ProblemDetailsHelper.ts";
+import getProblemDetails from "../error/getProblemDetails.ts";
 
 const BASE_URL = import.meta.env.VITE_API_URL as string;
 const ACCOUNT_LOGIN_URL = BASE_URL + "account/login";

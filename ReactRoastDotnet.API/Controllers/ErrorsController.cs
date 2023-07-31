@@ -18,7 +18,7 @@ public class ErrorsController : ApiController
     [HttpGet("Bad-Request")]
     public ActionResult GetBadRequest()
     {
-        return BadRequest("This is a bad request.");
+        return BadRequest("THIS IS A BAD REQUEST");
     }
 
     [HttpGet("Unauthorized")]
