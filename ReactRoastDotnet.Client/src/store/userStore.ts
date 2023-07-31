@@ -4,6 +4,7 @@ import type AuthUser from "../models/AuthUser";
 import type LoginRequest from "../models/LoginRequest.ts";
 import type ProblemDetails from "../models/ProblemDetails.ts";
 import {signIn} from "./userActions.ts";
+import problemToast from "../toast/problemToast.tsx";
 
 // TODO: Add persistence middleware
 
@@ -39,6 +40,7 @@ const useUserStore = create<UserState & Actions>((set) => ({
                 error: result.problemDetails,
                 loading: false,
             })
+            problemToast(result.problemDetails);
         }
     },
     signOutUser: () => set(initialState),

@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {Link, Navigate} from "react-router-dom";
+import toast from "react-hot-toast";
 // My imports.
 import type UserSignUpRequest from "../models/UserSignUpRequest.ts";
 import {emailOptions, nameOptions, passwordOptions} from "../auth/inputOptions.ts";
@@ -8,6 +9,7 @@ import AuthFormHeader from "../auth/AuthFormHeader.tsx";
 import AuthInput from "../auth/AuthInput.tsx";
 import {signUp} from "../store/userActions.ts";
 import {path} from "../routes.tsx";
+import problemToast from "../toast/problemToast.tsx";
 
 function SignUpPage() {
     const [guestEmail, setGuestEmail] = useState<string>();
@@ -33,12 +35,16 @@ function SignUpPage() {
         });
         if (result.ok) {
             setGuestEmail(result.value);
+            toast.success("Successfully created account!")
+        } else {
+            problemToast(result.problemDetails)
         }
     }
+
     const firstName = register("firstName", nameOptions);
     const lastName = register("lastName", nameOptions);
     const email = register("email", emailOptions);
-    const password = register("password", passwordOptions);
+    const password = register("password", passwordOptions)
 
     return (
         <main className="flex justify-center min-h-full py-6 md:py-6 mb-20 md:mb-0">

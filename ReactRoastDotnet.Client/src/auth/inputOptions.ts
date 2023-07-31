@@ -1,9 +1,30 @@
-const emailOptions = {
-    required: "Email is required",
-    pattern: {
-        value: /^.+@[^.].*\.[a-z]{2,}$/,
-        message: "Please enter a valid email"
+const lowerCaseRegex = /[a-z]/;
+const upperCaseRegex = /[A-Z]/;
+const numberRegex = /[0-9]/;
+const specialCharRegex = /[!@#$%^&*()_\-+=\][}{":;'?.`,~]/;
+function hasLowerCase(val: string): string | undefined{
+    if(lowerCaseRegex.test(val)){
+        return;
     }
+    return "Password must contain a lowercase letter.";
+}
+function hasUpperCase(val: string): string | undefined{
+    if(upperCaseRegex.test(val)){
+        return;
+    }
+    return "Password must contain an uppercase letter.";
+}
+function hasNumber(val: string): string | undefined{
+    if(numberRegex.test(val)){
+        return;
+    }
+    return "Password must contain a number.";
+}
+function hasSpecialCharacter(val: string): string | undefined{
+    if(specialCharRegex.test(val)){
+        return;
+    }
+    return "Password must contain a special character.";
 }
 const passwordOptions = {
     required: "Password is required",
@@ -11,9 +32,19 @@ const passwordOptions = {
         value: 6,
         message: "Min length is 6"
     },
+    validate: {
+        hasLowerCase,
+        hasUpperCase,
+        hasNumber,
+        hasSpecialCharacter,
+    },
+}
+
+const emailOptions = {
+    required: "Email is required",
     pattern: {
-        value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
-        message: "Password must contain the following characters: 1 uppercase, 1 lowercase, 1 digit, and 1 special."
+        value: /^.+@[^.].*\.[a-z]{2,}$/,
+        message: "Please enter a valid email"
     }
 }
 
