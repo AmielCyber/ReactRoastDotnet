@@ -3,7 +3,7 @@ import {Link, Navigate, useLocation} from "react-router-dom";
 // My imports.
 import type LoginRequest from "../models/LoginRequest.ts";
 import useUserStore from "../store/userStore.ts";
-import {emailOptions, passwordOptions} from "../auth/inputOptions.ts";
+import {emailOptions, signInPasswordOptions} from "../auth/inputOptions.ts";
 import AuthFormHeader from "../auth/AuthFormHeader.tsx";
 import AuthInput from "../auth/AuthInput.tsx";
 import {path} from "../routes.tsx";
@@ -35,7 +35,7 @@ function SignInPage() {
     }
 
     const email = register("email", emailOptions);
-    const password = register("password", passwordOptions);
+    const password = register("password", signInPasswordOptions);
 
     return (
         <main className="flex justify-center min-h-full py-6 md:py-24 mb-20 md:mb-0">

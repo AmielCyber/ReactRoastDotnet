@@ -26,7 +26,14 @@ function hasSpecialCharacter(val: string): string | undefined{
     }
     return "Password must contain a special character.";
 }
-const passwordOptions = {
+const signInPasswordOptions = {
+    required: "Password is required",
+    minLength: {
+        value: 6,
+        message: "Min length is 6"
+    }
+}
+const signUpPasswordOptions = {
     required: "Password is required",
     minLength: {
         value: 6,
@@ -60,4 +67,4 @@ const nameOptions = {
     }
 }
 
-export {emailOptions, passwordOptions, nameOptions};
+export {emailOptions, nameOptions, signInPasswordOptions, signUpPasswordOptions};
