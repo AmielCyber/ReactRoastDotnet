@@ -1,5 +1,5 @@
 // My import.
-import ProblemDetails from "./ProblemDetails.ts";
+import ProblemDetails from "../problem-details/ProblemDetails.ts";
 
 type Result<T, P = ProblemDetails> =
     | { ok: true; value: T }
