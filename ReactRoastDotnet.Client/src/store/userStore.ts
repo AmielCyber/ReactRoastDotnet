@@ -2,7 +2,7 @@ import {create} from "zustand";
 // My imports.
 import type AuthUser from "../models/AuthUser";
 import type LoginRequest from "../models/LoginRequest.ts";
-import type ProblemDetails from "../problem-details/ProblemDetails.ts";
+import type {ProblemDetails} from "problem-details-mapper";
 import {signIn} from "./userActions.ts";
 import problemToast from "../toast/problemToast.tsx";
 
