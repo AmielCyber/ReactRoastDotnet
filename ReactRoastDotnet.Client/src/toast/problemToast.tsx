@@ -1,6 +1,6 @@
 import toast, {ErrorIcon} from "react-hot-toast";
 // My Imports.
-import type {ProblemDetails} from "problem-details-mapper";
+import type {ProblemDetails} from "extract-problem-details";
 import ProblemDetailsToast from "./ProblemDetailsToast.tsx";
 
 function problemToast(problemDetails: ProblemDetails) {
