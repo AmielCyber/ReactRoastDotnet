@@ -1,5 +1,5 @@
 // My import.
-import type {ProblemDetails} from "problem-details-mapper";
+import type {ProblemDetails} from "extract-problem-details";
 
 type Result<T, P = ProblemDetails> =
     | { ok: true; value: T }

@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 // My imports.
-import getProblemDetails from "problem-details-mapper";
+import getProblemDetails from "extract-problem-details";
 import problemToast from "../toast/problemToast.tsx";
 
 const baseURL = import.meta.env.VITE_API_URL as string;
