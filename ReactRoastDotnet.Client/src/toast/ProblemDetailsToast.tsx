@@ -2,7 +2,7 @@ import type {ReactNode} from "react";
 import type {Toast} from "react-hot-toast";
 import toast from "react-hot-toast";
 // My imports.
-import type {ProblemDetails} from "extract-problem-details";
+import type {ProblemDetails} from "get-problem-details";
 import XMarkIcon from "../icons/XMarkIcon.tsx";
 
 type Props = {
